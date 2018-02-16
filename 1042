@@ -1,0 +1,54 @@
+#include<stdio.h>
+#include<stdlib.h>
+const int maxn = 55;
+char c[5] = { 'S','H','C','D','J' };
+int main()
+{
+	int start[maxn], next[maxn],ans[maxn];
+	int K;
+	scanf("%d", &K);
+	for (int i = 1; i < 55; i++)
+	{
+		start[i] = i;
+	}
+	for (int i = 1; i < 55; i++)
+	{
+		scanf("%d", &next[i]);
+	}
+	while (K--)
+	{
+		for (int i = 1; i < 55; i++)
+		{
+			ans[next[i]] = start[i];
+		}
+		for (int i = 1; i < 55; i++)
+			start[i] = ans[i];
+	}
+	for (int i = 1; i < 55; i++)
+	{
+		if (ans[i] / 14 == 0)
+		{
+			printf("%c%d", c[0], ans[i]);
+		}
+		else if (ans[i] / 27 == 0)
+		{
+			printf("%c%d", c[1], ans[i]-13);
+		}
+		else if (ans[i] / 40 == 0)
+		{
+			printf("%c%d", c[2], ans[i] - 26);
+		}
+		else if (ans[i] / 53 == 0)
+		{
+			printf("%c%d", c[3], ans[i] - 39);
+		}
+		else
+		{
+			printf("%c%d", c[4], ans[i] - 52);
+		}
+		if (i != 54)
+			printf(" ");
+	}
+	system("pause");
+	return 0;
+}
