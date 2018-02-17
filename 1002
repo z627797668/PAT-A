@@ -1,0 +1,37 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+const int maxn = 1005;
+int main()
+{
+	double A[maxn];
+	int K,exp;
+	double eco;
+	int count = 0;
+	scanf("%d", &K);
+	memset(A, 0.0, sizeof(A));
+	for (int i = 0; i < K; i++)
+	{
+		scanf("%d %lf", &exp, &eco);
+		A[exp] = eco;
+	}
+	scanf("%d", &K);
+	for (int i = 0; i < K; i++)
+	{
+		scanf("%d %lf", &exp, &eco);
+		A[exp] += eco;
+	}
+	for (int i = 1000; i>=0; i--)
+	{
+		if(A[i]!=0.0)
+		count++;
+	}
+	printf("%d", count);
+	for (int i = 1000; i>=0; i--)
+	{
+		if(A[i]!=0.0)
+		printf(" %d %.1lf", i, A[i]);
+	}
+	system("pause");
+	return 0;
+}
