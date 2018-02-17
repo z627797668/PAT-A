@@ -1,0 +1,42 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+const int maxn = 2005;
+int main()
+{
+	double A[maxn],B[maxn];
+	int K,count=0;
+	memset(A, 0.0, sizeof(A));
+	memset(B, 0.0, sizeof(B));
+	scanf_s("%d", &K);
+	int exp;
+	double eco;
+	for (int i = 0; i < K; i++)
+	{
+		scanf_s("%d %lf", &exp, &eco);
+		A[exp] = eco;
+	}
+	scanf_s("%d", &K);
+	for (int i = 0; i < K; i++)
+	{
+		scanf_s("%d %lf", &exp, &eco);
+		for (int i = 1000; i >=0 ; i--)
+		{
+			if (A[i] != 0.0)
+				B[i + exp] += A[i] * eco;
+		}
+	}
+	for (int i = 2004; i >= 0; i--)
+	{
+		if (B[i] != 0.0)
+			count++;
+	}
+	printf("%d", count);
+	for (int i = 2004; i >= 0; i--)
+	{
+		if (B[i] != 0.0)
+			printf(" %d %.1lf",i,B[i]);
+	}
+	system("pause");
+	return 0;
+}
