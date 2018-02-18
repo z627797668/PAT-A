@@ -1,0 +1,56 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct student
+{
+	char name[11];
+	char id[11];
+	int grade;
+}female,male,temp;
+void init()
+{
+	female.grade = -1;
+	male.grade = 101;
+}
+int main()
+{
+	int N;
+	scanf("%d", &N);
+	char gender;
+	init();
+	for (int i = 0; i < N; i++)
+	{
+		scanf("%s %c %s %d", temp.name, &gender, temp.id, &temp.grade);
+		if (gender == 'F')
+		{
+			if (temp.grade > female.grade)
+			{
+				female = temp;
+			}
+		}
+		else
+		{
+			if (temp.grade < male.grade)
+			{
+				male = temp;
+			}
+		}
+	}
+	if (female.grade == -1 && male.grade == 101)
+	{
+		printf("Absent\nAbsent\nNA");
+	}
+	else if (female.grade == -1 && male.grade != 101)
+	{
+		printf("Absent\n%s %s\nNA",male.name,male.id);
+	}
+	else if(female.grade != -1 && male.grade == 101)
+	{
+		printf("%s %s\nAbsent\nNA", female.name, female.id);
+	}
+	else
+	{
+		printf("%s %s\n%s %s\n%d", female.name, female.id, male.name, male.id,female.grade-male.grade);
+	}
+	system("pause");
+	return 0;
+}
