@@ -1,0 +1,30 @@
+#include<stdio.h>
+#include<stdlib.h>
+char c[3] = { 'W','T','L' };
+int main()
+{
+	double max[3] = {0.0};
+	int ans[3] = { 0 };
+	double temp;
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			scanf_s("%lf", &temp);
+			if (max[i] < temp)
+			{
+				max[i] = temp;
+				ans[i] = j;
+			}
+		}
+	}
+	temp = 1.0;
+	for (int i = 0; i < 3; i++)
+	{
+		printf("%c ", c[ans[i]]);
+		max[i] = max[i] * temp;
+		temp = max[i];
+	}
+	printf("%.2lf", (temp*0.65 - 1) * 2);
+	system("pause");
+	return 0;
