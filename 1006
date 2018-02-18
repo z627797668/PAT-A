@@ -1,0 +1,45 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct time
+{
+	int hour, minute, second;
+};
+struct person
+{
+	time in;
+	time out;
+	char id[16];
+}last, first, temp;
+void init()
+{
+	first.in.hour = 23;
+	first.in.minute = 59;
+	first.in.second = 59;
+	last.out.hour = 0;
+	last.out.minute = 0;
+	last.out.second = 0;
+}
+bool comp(time a, time b)
+{
+	if (a.hour < b.hour)return true;
+	else if (a.hour == b.hour&&a.minute < b.minute)return true;
+	else if (a.hour == b.hour&&a.minute == b.minute&&a.second <= b.second)return true;
+	else return false;
+}
+int main()
+{
+	init();
+	int M;
+	scanf("%d", &M);
+	for (int i = 0; i < M; i++)
+	{
+		scanf("%s %d:%d:%d %d:%d:%d", temp.id, &temp.in.hour, &temp.in.minute, &temp.in.second, &temp.out.hour, &temp.out.minute, &temp.out.second);
+		if (comp(temp.in, first.in) == true)
+			first = temp;
+		if (comp(last.out, temp.out) == true)
+			last = temp;
+	}
+	printf("%s %s", first.id, last.id);
+	system("pause");
+	return 0;
+}
