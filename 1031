@@ -1,0 +1,36 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+int N, n1, n2, n3;
+const int maxn = 100;
+char s[100];
+int main()
+{
+	scanf("%s", s);
+	N = strlen(s);
+	n1 = 1;
+	n2 = 3;
+	while (n1<=n2&&n2>=3)
+	{
+		n1++;
+		n2 = N + 2 - n1 * 2;
+	}
+	n1--;
+	n3 = n1;
+	n2 = N + 2 - n1 - n3;
+	for (int i = 0; i < n1 - 1; i++)
+	{
+		printf("%c", s[i]);
+		for (int j = 0; j < n2-2; j++)
+		{
+			printf(" ");
+		}
+		printf("%c\n", s[N - 1 - i]);
+	}
+	for (int i = 0; i < n2; i++)
+	{
+		printf("%c", s[n1 - 1 + i]);
+	}
+	system("pause");
+	return 0;
+}
