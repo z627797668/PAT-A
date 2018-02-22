@@ -1,0 +1,14 @@
+#include<stdio.h>
+#include<stdlib.h>
+int main()
+{
+	int ag, as, ak, bg, bs, bk;
+	scanf("%d.%d.%d %d.%d.%d", &ag, &as, &ak, &bg, &bs, &bk);
+	long long a, b;
+	a = ag * 29 * 17 + as * 29 + ak;
+	b = bg * 29 * 17 + bs * 29 + bk;
+	a += b;
+	printf("%d.%d.%d", a/ 29 / 17, a / 29 % 17, a % 29);
+	system("pause");
+	return 0;
+}
