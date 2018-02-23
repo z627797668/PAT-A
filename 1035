@@ -1,0 +1,74 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+const int maxn = 1005;
+struct user
+{
+	char name[15];
+	char password[15];
+}uc[maxn];
+int main()
+{
+	int N;
+	bool flag = false;
+	int count = 0;
+	scanf("%d", &N);
+	user temp;
+	for (int i = 0; i < N; i++)
+	{
+		flag = false;
+		scanf("%s %s", temp.name, temp.password);
+		int len = strlen(temp.password);
+		for (int j = 0; j < len; j++)
+		{
+			if (temp.password[j] == '1')
+			{
+				flag = true;
+				temp.password[j] = '@';
+			}
+			else if (temp.password[j] == '0')
+			{
+				flag = true;
+				temp.password[j] = '%';
+			}
+			else if (temp.password[j] == 'l')
+			{
+				flag = true;
+				temp.password[j] = 'L';
+			}
+			else if (temp.password[j] == 'O')
+			{
+				flag = true;
+				temp.password[j] = 'o';
+			}
+			else
+				;
+		}
+		if (flag == true)
+		{
+			uc[count++] = temp;
+		}
+	}
+	if (count != 0)
+	{
+		printf("%d\n", count);
+		for (int i = 0; i < count; i++)
+		{
+			printf("%s %s\n", uc[i].name, uc[i].password);
+		}
+	}
+	else
+	{
+		if (N == 1)
+		{
+			printf("There is 1 account and no account is modified");
+		}
+		else
+		{
+
+			printf("There are %d accounts and no account is modified", N);
+		}
+	}
+	system("pause");
+	return 0;
+}
