@@ -1,0 +1,316 @@
+#include<stdio.h>
+#include<stdlib.h>
+char digit[10][5] = { "ling","yi","er","san","si","wu","liu","qi","ba","jiu" };
+char wei[5][5] = { "Yi","Wan","Qian","Bai","Shi" };
+int main()
+{
+	int y,w[4], g[4];
+	int num;
+	scanf("%d", &num);
+	if (num < 0)
+	{
+		printf("Fu ");
+		num = -num;
+	}
+	bool flag = false;
+	bool feiling = false;
+	if (num >= 100000000)
+	{
+		printf("%s %s", digit[num / 100000000], wei[0]);
+		int wnum = num / 10000 % 10000;
+		if (wnum / 1000 == 0)
+		{
+			flag = true;
+		}
+		else
+		{
+			feiling = true;
+			printf(" %s %s", digit[wnum / 1000], wei[2]);
+		}
+		if (wnum / 100 % 10 == 0)
+		{
+				flag = true;
+		}
+		else
+		{
+			feiling = true;
+			if (flag == true) {
+				printf(" %s %s %s", digit[0],digit[wnum/100%10],wei[3]);
+				flag = false;
+			}
+			else {
+				printf(" %s %s",digit[wnum / 100 % 10], wei[3]);
+			}
+		}
+		if (wnum / 10 % 10 == 0)
+		{
+			flag = true;
+		}
+		else
+		{
+			feiling = true;
+			if (flag == true)
+			{
+				printf(" %s %s %s", digit[0], digit[wnum / 10 % 10], wei[4]);
+				flag = false;
+			}
+			else
+			{
+				printf(" %s %s", digit[wnum / 10 % 10], wei[4]);
+			}
+		}
+		if (wnum % 10 == 0)
+		{
+			;
+		}
+		else
+		{
+			feiling = true;
+			if (flag == true)
+			{
+				printf(" %s %s", digit[0], digit[wnum % 10]);
+			}
+			else
+			{
+				printf(" %s", digit[wnum % 10]);
+			}
+		}
+		if (feiling == true)
+			printf(" %s", wei[1]);
+		int gnum = num % 10000;
+		if (gnum / 1000 == 0)
+		{
+			flag = true;
+		}
+		else
+		{
+			flag = false;
+			if (feiling == false)
+			{
+				printf(" %s %s %s", digit[0], digit[gnum / 1000], wei[2]);
+			}
+			else
+			{
+				printf(" %s %s",  digit[gnum / 1000], wei[2]);
+			}
+		}
+		if (gnum / 100%10 == 0)
+		{
+			flag = true;
+		}
+		else
+		{
+			if (flag == true)
+			{
+				printf(" %s %s %s", digit[0], digit[gnum / 100%10], wei[3]);
+				flag = false;
+			}
+			else
+			{
+				printf(" %s %s", digit[gnum / 100%10], wei[3]);
+			}
+		}
+		if (gnum / 10 % 10 == 0)
+		{
+			flag = true;
+		}
+		else
+		{
+			if (flag == true)
+			{
+				printf(" %s %s %s", digit[0], digit[gnum / 10 % 10], wei[4]);
+				flag = false;
+			}
+			else
+			{
+				printf(" %s %s", digit[gnum / 10 % 10], wei[4]);
+			}
+		}
+		if (gnum % 10 != 0)
+		{
+			if (flag == true)
+				printf(" %s %s", digit[0], digit[gnum % 10]);
+			else
+				printf(" %s", digit[gnum % 10]);
+
+		}
+	}
+	else if (num < 100000000 && num >= 10000)
+	{
+		int wnum = num / 10000 % 10000;
+		if (wnum / 1000 == 0)
+			;
+		else
+		{
+			feiling = true;
+			printf("%s %s", digit[wnum / 1000], wei[2]);
+		}
+		if (wnum / 100 % 10 == 0)
+		{
+			if(feiling==true)
+			flag = true;
+		}
+		else
+		{
+			if (feiling == true) {
+				printf(" %s %s", digit[wnum / 100 % 10], wei[3]);
+			}
+			else{
+				printf("%s %s", digit[wnum / 100 % 10], wei[3]);
+				feiling = true;
+			}
+		}
+		if (wnum / 10 % 10 == 0)
+		{
+			if(feiling==true)
+			flag = true;
+		}
+		else
+		{
+			if (feiling==true)
+			{
+				if(flag==true)
+				printf(" %s %s %s", digit[0], digit[wnum / 10 % 10], wei[4]);
+				flag = false;
+			}
+			else
+			{
+				printf("%s %s", digit[wnum / 10 % 10], wei[4]);
+				feiling = true;
+			}
+		}
+		if (wnum % 10 == 0)
+		{
+			;
+		}
+		else
+		{
+			flag = false;
+			if (feiling == true)
+			{
+				printf(" %s %s", digit[0], digit[wnum % 10]);
+			}
+			else
+			{
+				printf("%s", digit[wnum % 10]);
+			}
+		}
+		printf(" %s", wei[1]);
+		int gnum = num % 10000;
+		if (gnum / 1000 == 0)
+		{
+			flag = true;
+		}
+		else
+		{
+			flag = false;
+			printf(" %s %s", digit[gnum / 1000], wei[2]);
+		}
+		if (gnum / 100 % 10 == 0)
+		{
+			flag = true;
+		}
+		else
+		{
+			if (flag == true)
+			{
+				printf(" %s %s %s", digit[0], digit[gnum / 100 % 10], wei[3]);
+				flag = false;
+			}
+			else
+			{
+				printf(" %s %s", digit[gnum / 100 % 10], wei[3]);
+			}
+		}
+		if (gnum / 10 % 10 == 0)
+		{
+			flag = true;
+		}
+		else
+		{
+			if (flag == true)
+			{
+				printf(" %s %s %s", digit[0], digit[gnum / 10 % 10], wei[4]);
+				flag = false;
+			}
+			else
+			{
+				printf(" %s %s", digit[gnum / 10 % 10], wei[4]);
+			}
+		}
+		if (gnum % 10 != 0)
+		{
+			if(flag==true)
+			printf(" %s %s", digit[0],digit[gnum % 10]);
+			else
+				printf(" %s", digit[gnum % 10]);
+		}
+	}
+	else if(num==0)
+		printf("ling");
+	else
+	{
+		if (num / 1000 == 0);
+		else
+		{
+			feiling = true;
+			flag = false;
+			printf("%s %s", digit[num / 1000], wei[2]);
+		}
+		if (num / 100 % 10 == 0)
+		{
+			if (feiling == true)
+				flag = true;
+		}
+		else
+		{
+			if (feiling == true)
+			{
+				printf(" %s %s", digit[num / 100 % 10], wei[3]);
+			}
+			else
+			{
+				printf("%s %s", digit[num / 100 % 10], wei[3]);
+				feiling = true;
+			}
+		}
+		if (num / 10 % 10 == 0)
+		{
+			if(feiling==true)
+			flag = true;
+		}
+		else
+		{
+			if (feiling == true)
+			{
+				if (flag == true)
+				printf(" %s %s %s", digit[0], digit[num / 10 % 10], wei[4]);
+				else
+				{
+					printf(" %s %s",  digit[num / 10 % 10], wei[4]);
+				}
+				flag = false;
+			}
+			else
+			{
+				printf("%s %s", digit[num / 10 % 10], wei[4]);
+				feiling = true;
+			}
+		}
+		if (num % 10 != 0)
+		{
+			if (flag == true)
+				printf(" %s %s", digit[0], digit[num % 10]);
+			else {
+				if(feiling==true)
+				printf(" %s", digit[num % 10]);
+				else
+				{
+					printf("%s", digit[num % 10]);
+				}
+			}
+			}
+	}
+	system("pause");
+	return 0;
+}
