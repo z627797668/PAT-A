@@ -1,0 +1,58 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+const int maxn = 105;
+char str[maxn][260];
+void reverse(char st[])
+{
+	int len = strlen(st);
+	char temp;
+	for (int i = 0; i < len/2; i++)
+	{
+		temp = st[i];
+		st[i] = st[len - 1 - i];
+		st[len - 1 - i] = temp;
+	}
+}
+int main()
+{
+	int N;
+	scanf("%d", &N);
+	getchar();
+	for (int i = 0; i < N; i++)
+	{
+		gets_s(str[i]);
+		reverse(str[i]);
+	}
+	int lena = strlen(str[0]);
+	int anslen = lena;
+	int i = 1;
+	for (; i < N; i++)
+	{
+		int lenb = strlen(str[i]);
+		int j = 0;
+		for (; j <anslen&&j<lenb; j++)
+		{
+			if (str[0][j] != str[i][j])
+			{
+				break;
+			}
+		}
+		if (j == 0)
+			break;
+		else
+		{
+			if (j < anslen)
+				anslen = j;
+		}
+	}
+	if (i != N)
+		printf("nai");
+	else
+	{
+		for (int k = anslen - 1; k >= 0; k--)
+			printf("%c", str[0][k]);
+	}
+	system("pause");
+	return 0;
+}
