@@ -1,0 +1,107 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<algorithm>
+#include<string.h>
+using namespace std;
+int rate[24] = { 0 };
+const int maxn = 1005;
+struct person
+{
+	char name[25];
+	int month;
+	int day;
+	int hour;
+	int minute;
+	int flag;
+}per[maxn];
+int cal(person a, person b, int& time)
+{
+	double doll = 0;
+	while (a.day<b.day||a.hour<b.hour||a.minute<b.minute)
+	{
+		time++;
+		a.minute++;
+		doll += rate[a.hour];
+		if (a.minute == 60)
+		{
+			a.hour++;
+			a.minute = 0;
+		}
+		if (a.hour == 24)
+		{
+			a.hour = 0;
+			a.day++;
+		}
+	}
+	return doll;
+}
+bool cmp(person a, person b)
+{
+	if (strcmp(a.name, b.name) != 0)return strcmp(a.name, b.name) < 0;
+	else if (a.day != b.day)return a.day < b.day;
+	else if (a.hour != b.hour)return a.hour < b.hour;
+	else return a.minute < b.minute;
+}
+int main()
+{
+	int N;
+	char temp[30];
+	for (int i = 0; i < 24; i++)
+	{
+		scanf("%d", &rate[i]);
+	}
+	scanf("%d", &N);
+	for (int i = 0; i < N; i++)
+	{
+		scanf("%s %d:%d:%d:%d %s", per[i].name, &per[i].month, &per[i].day, &per[i].hour, &per[i].minute, temp);
+		if (strcmp(temp, "on-line") == 0)
+		{
+			per[i].flag = 0;
+		}
+		else
+			per[i].flag = 1;
+	}
+	sort(per, per + N, cmp);
+	int i=0;
+	bool ip = false;
+	double sum=0;
+	while (i<N)
+	{
+		if (strcmp(per[i].name, per[i + 1].name) == 0)
+		{
+			if (per[i].flag == 0 && per[i+1].flag == 1)
+			{ 
+				if (ip == false)
+				{
+					ip = true;
+					printf("%s %02d\n", per[i].name, per[i].month);
+				}
+				int time = 0;
+				double doll = cal(per[i], per[i + 1], time)*1.0/100;
+				sum += doll;
+				printf("%02d:%02d:%02d %02d:%02d:%02d %d $%.2lf\n", per[i].day, per[i].hour, per[i].minute, per[i + 1].day, per[i + 1].hour, per[i+1].minute, time, doll);
+				i++;
+			}
+			else
+			{
+				i++;
+			}
+		}
+		else
+		{
+			if (sum != 0)
+			{
+				printf("Total amount: $%.2lf\n", sum);
+				sum = 0;
+			}
+			ip = false;
+			i++;
+		}
+	}
+	if (sum != 0)
+	{
+		printf("Total amount: $%.2lf\n", sum);
+	}
+	system("pause");
+	return 0;
+}
