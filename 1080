@@ -1,0 +1,75 @@
+#include<stdio.h>
+#include<algorithm>
+#include<stdlib.h>
+#include<vector>
+using namespace std;
+const int maxn = 40005;
+struct node
+{
+	int ge, gi, total;
+	int choose[5];
+	int id;
+}stu[maxn],bef[maxn];
+int quota[105];
+bool cmp(node a, node b)
+{
+	if (a.total != b.total)return a.total > b.total;
+	else return a.ge > b.ge;
+}
+int main()
+{
+	int N, M, K;
+	vector<int>vi[105];
+	scanf("%d %d %d", &N, &M, &K);
+	for (int i = 0; i < M; i++)
+	{
+		scanf("%d", &quota[i]);
+	}
+	for (int i = 0; i < N; i++)
+	{
+		scanf("%d %d", &stu[i].ge, &stu[i].gi);
+		stu[i].total = stu[i].ge + stu[i].gi;
+		for (int j = 0; j <K ; j++)
+		{
+			scanf("%d", &stu[i].choose[j]);
+		}
+		stu[i].id = i;
+		bef[i] = stu[i];
+	}
+	sort(stu, stu + N, cmp);
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < K; j++)
+		{
+			if (quota[stu[i].choose[j]] > 0)
+			{
+				quota[stu[i].choose[j]]--;
+				vi[stu[i].choose[j]].push_back(stu[i].id);
+				break;
+			}
+			else if(quota[stu[i].choose[j]]==0)
+			{
+				int temp =vi[stu[i].choose[j]][vi[stu[i].choose[j]].size() - 1];
+				if (bef[temp].total == stu[i].total&&bef[temp].ge == stu[i].ge)//keypoint
+				{
+					vi[stu[i].choose[j]].push_back(stu[i].id);
+					break;
+				}
+			}
+		}
+	}
+	for (int i = 0; i < M; i++)
+	{
+		int len = vi[i].size();
+		sort(vi[i].begin(), vi[i].end());
+		for (int j = 0; j <len ; j++)
+		{
+			printf("%d", vi[i][j]);
+			if (j != len - 1)
+				printf(" ");
+		}
+		printf("\n");
+	}
+	system("pause");
+	return 0;
+}
