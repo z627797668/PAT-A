@@ -1,0 +1,128 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<algorithm>
+using namespace std;
+const int maxn = 10005;
+struct node
+{
+	int id;
+	int total = -1;
+	int flag = 0;
+	int grade[5] = { -2,-2,-2,-2,-2 };
+}n[maxn];
+int to[100005];
+bool cmp(node a, node b)
+{
+    if (a.total != b.total)return a.total > b.total;
+	else if (a.flag != b.flag)return a.flag > b.flag;
+	else return a.id < b.id;
+}
+int main()
+{
+	int N, K, M;
+	for (int i = 0; i < 100005; i++)
+	{
+		to[i] = -1;
+	}
+	int full_grade[5];
+	scanf("%d %d %d", &N, &K, &M);
+	for (int i = 0; i < K; i++)
+	{
+		scanf("%d", &full_grade[i]);
+	}
+	int wh, score, idd, num = 0, temp;
+	bool flagg;
+	for (int i = 0; i < M; i++)
+	{
+		flagg = false;
+		scanf("%d %d %d", &idd, &wh, &score);
+		wh--;
+		if (to[idd] == -1)
+		{
+			flagg = true;
+			to[idd] = num;
+			temp = num;
+			n[temp].id = idd;
+		}
+		else
+		{
+			temp = to[idd];
+		}
+		if (score ==-1)
+		{
+			if(n[temp].grade[wh] == -2)
+				n[temp].grade[wh] = -1;
+		}
+		else
+		{
+			if (score>n[temp].grade[wh])
+			{
+				if (n[temp].total == -1)
+					n[temp].total = 0;
+				if (n[temp].grade[wh] != -2&&n[temp].grade[wh]!=-1)
+				{
+					n[temp].total = n[temp].total + score - n[temp].grade[wh];
+				}
+				else
+				{
+					n[temp].total = n[temp].total + score;
+				}
+				n[temp].grade[wh] = score;
+				if (score == full_grade[wh])
+					n[temp].flag++;
+			}
+		}
+		if (flagg == true)
+		{
+			num++;
+		}
+	}
+	sort(n, n + num, cmp);
+	int r = 1;
+	for (int i = 0; i < num; i++)
+	{
+		if (n[i].total != -1) {
+			if (i > 0 && n[i].total == n[i - 1].total)
+			{
+				printf("%d %05d %d", r, n[i].id, n[i].total);
+				for (int j = 0; j < K; j++)
+				{
+					if (n[i].grade[j] > -1)
+						printf(" %d", n[i].grade[j]);
+					else if (n[i].grade[j] == -1)
+					{
+						printf(" 0");
+					}
+					else
+					{
+						printf(" -");
+					}
+				}
+				printf("\n");
+			}
+			else
+			{
+				r = 1 + i;
+				printf("%d %05d %d", r, n[i].id, n[i].total);
+				for (int j = 0; j < K; j++)
+				{
+					if (n[i].grade[j] > -1)
+						printf(" %d", n[i].grade[j]);
+					else if (n[i].grade[j] == -1)
+					{
+						printf(" 0");
+					}
+					else
+					{
+						printf(" -");
+					}
+				}
+				printf("\n");
+			}
+		}
+		else
+			break;
+	}
+	system("pause");
+	return 0;
+}
