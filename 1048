@@ -1,0 +1,43 @@
+#include<stdio.h>
+#include<stdlib.h>
+const int maxn = 1005;
+int hashtable[maxn] = { 0 };
+int main()
+{
+	int N, M,temp;
+	scanf("%d %d", &N, &M);
+	for (int i = 0; i < N; i++)
+	{
+		scanf("%d", &temp);
+		hashtable[temp]++;
+	}
+	bool t = false;
+	for (int i = 1; i < maxn; i++)
+	{
+		if (hashtable[i] != 0)
+		{
+			if (i != (M - i))
+			{
+				if (hashtable[M - i] > 0)
+				{
+					t = true;
+					printf("%d %d", i, M - i);
+					break;
+				}
+			}
+			else
+			{
+				if (hashtable[M - i] >= 2)
+				{
+					t = true;
+					printf("%d %d", i, M - i);
+					break;
+				}
+			}
+		}
+	}
+	if (t == false)
+		printf("No Solution");
+	system("pause");
+	return 0;
+}
