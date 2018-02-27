@@ -1,0 +1,27 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+const int maxn = 10005;
+bool hashtable[128] = { false };
+int main()
+{
+	char s1[maxn];
+	char s2[maxn];
+	gets_s(s1);
+	gets_s(s2);
+	int len1 = strlen(s1);
+	int len2 = strlen(s2);
+	int i = 0;
+	for (int j = 0;j < len2; j++)
+	{
+		hashtable[s2[j]] = true;
+	}
+	while (i<len1)
+	{
+		if (hashtable[s1[i]] == false)
+			printf("%c", s1[i]);
+		i++;
+	}
+	system("pause");
+	return 0;
+}
