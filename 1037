@@ -1,0 +1,55 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<algorithm>
+using namespace std;
+const int maxn = 100005;
+int main()
+{
+	int NC, NP;
+	int c[maxn], p[maxn];
+	scanf("%d", &NC);
+	for (int i = 0; i < NC; i++)
+	{
+		scanf("%d", &c[i]);
+	}
+	scanf("%d", &NP);
+	for (int i = 0; i < NP; i++)
+	{
+		scanf("%d", &p[i]);
+	}
+	sort(c, c + NC);
+	sort(p, p + NP);
+	int i = 0, j = 0;
+	int count = 0;
+	while (i<NC&&j<NP)
+	{
+		if (c[i] <= 0 && p[j] <= 0)
+		{
+			count += c[i] * p[j];
+			i++;
+			j++;
+		}
+		else
+		{
+			break;
+		}
+	}
+	i = NC-1;
+	j = NP-1;
+	while (i>=0&&j>=0)
+	{
+		if (c[i] > 0 && p[j] > 0)
+		{
+			count += c[i] * p[j];
+			i--;
+			j--;
+		}
+		else
+		{
+			break;
+		}
+	}
+	printf("%d", count);
+	system("pause");
+	return 0;
+}
