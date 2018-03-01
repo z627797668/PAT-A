@@ -1,0 +1,52 @@
+#include<stdio.h>
+#include<vector>
+#include<stdlib.h>
+#include<string.h>
+#include<algorithm>
+using namespace std;
+const int maxn = 26*26*26*10+1;
+int hashfun(char str[])
+{
+	int len = strlen(str);
+	int sum = 0;
+	for (int i = 0; i < 3; i++)
+	{
+		sum = sum * 26 + str[i] - 'A';
+	}
+	sum = sum*10 + str[3] - '0';
+	return sum;
+}
+int main()
+{
+	int N, K;
+	vector<int>vi[maxn];
+	char name[5];
+	scanf("%d %d", &N, &K);
+	int coursenum, all;
+	for (int i = 0; i < K; i++)
+	{
+		scanf("%d %d", &coursenum, &all);
+		for (int j = 0; j < all; j++)
+		{
+			scanf("%s", name);
+			int sum = hashfun(name);
+			vi[sum].push_back(coursenum);
+		}
+	}
+	for (int i = 0; i < N; i++)
+	{
+		scanf("%s", name);
+		int sum = hashfun(name);
+		printf("%s", name);
+		printf(" %d",vi[sum].size());
+		sort(vi[sum].begin(), vi[sum].end());
+		vector<int>::iterator it = vi[sum].begin();
+		for (; it !=vi[sum].end() ; it++)
+		{
+			printf(" %d", *it);
+		}
+		printf("\n");
+	}
+	system("pause");
+	return 0;
+}
