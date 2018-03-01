@@ -1,0 +1,115 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string>
+#include<iostream>
+using namespace std;
+int N;
+string fun(string s,int&num)
+{
+	while (s[0]=='0')
+	{
+		s.erase(0,1);
+	}
+	if (s.size() == 0)
+	{
+		num = 0;
+		while (s.size()<N)
+		{
+			s += "0";
+		}
+		return s;
+	}
+	else
+	{
+		if (s[0] == '.')
+		{
+			s.erase(0, 1);
+			int i;
+			for (i = 0; i < s.size(); i++)
+			{
+				if (s[i] == '0')
+				{
+					num--;
+				}
+				else
+				{
+					break;
+				}
+			}
+			if (i == s.size())
+			{
+				s.clear();
+				num = 0;
+				while (s.size()<N)
+				{
+					s += "0";
+				}
+				return s;
+			}
+			else
+			{
+				s.erase(0, -num);
+				while (s.size()<N)
+				{
+					s += "0";
+				}
+				s.erase(s.begin() + N, s.end());
+				return s;
+			}
+		}
+		else
+		{
+			int j;
+			for ( j = 0; j < s.size(); j++)
+			{
+				if (s[j] != '.')
+				{
+					num++;
+				}
+				else
+					break;
+			}
+			if (j == s.size())
+			{
+				while (s.size()<N)
+				{
+					s += "0";
+				}
+				s.erase(s.begin() + N, s.end());
+				return s;
+			}
+			else
+			{
+				s.erase(j, 1);
+				while (s.size()<N)
+				{
+					s += "0";
+				}
+				s.erase(s.begin() + N, s.end());
+				return s;
+			}
+		}
+	}
+}
+int main()
+{
+	string s1, s2;
+	scanf("%d", &N);
+	cin >> s1;
+	cin >> s2;
+	int num1,num2;
+	num1 = 0;
+	num2 = 0;
+	s1 = fun(s1, num1);
+	s2 = fun(s2, num2);
+	if (num1 == num2 && s1 == s2)
+	{
+		cout << "YES 0." << s1 << "*10^" << num1;
+	}
+	else
+	{
+		cout << "NO 0." << s1 << "*10^" << num1<<" 0."<<s2<<"*10^"<<num2;
+	}
+	system("pause");
+	return 0;
+}
