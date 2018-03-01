@@ -1,0 +1,46 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<set>
+using namespace std;
+const int maxn = 55;
+int main()
+{
+	set<int>st[maxn];
+	set<int> temp;
+	int N,M;
+	scanf("%d", &N);
+	int tempp;
+	for (int i = 1; i <= N; i++)
+	{
+		scanf("%d", &M);
+		for (int j = 0; j < M; j++)
+		{
+			scanf("%d", &tempp);
+			st[i].insert(tempp);
+		}
+	}
+	int K, a, b;
+	int nc, nt;
+	scanf("%d", &K);
+	for (int i = 0; i < K; i++)
+	{
+		nc = 0;
+		scanf("%d %d", &a, &b);
+		nt = st[a].size();
+		for (set<int>::iterator it =st[b].begin() ; it !=st[b].end(); it++)
+		{
+			if (st[a].find(*it) != st[a].end())
+			{
+				nc++;
+			}
+			else
+			{
+				nt++;
+			}
+		}
+		printf("%.1lf%%\n", nc*100.0 / nt);
+		temp.clear();
+	}
+	system("pause");
+	return 0;
+}
