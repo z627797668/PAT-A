@@ -1,0 +1,43 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<iostream>
+#include<algorithm>
+#include<vector>
+const int maxn = 2505;
+const int maxs = 40005;
+char name[maxs][5];
+using namespace std;
+bool cmp(int a, int b)
+{
+	return strcmp(name[a], name[b]) < 0;
+}
+int main()
+{
+	vector<int>vi[maxn];
+	int N, K;
+	scanf("%d %d", &N, &K);
+	for (int i = 0; i < N; i++)
+	{
+		scanf("%s",name[i]);
+		int all;
+		scanf("%d", &all);
+		int coursenum;
+		for (int j = 0; j < all; j++)
+		{
+			scanf("%d", &coursenum);
+			vi[coursenum].push_back(i);
+		}
+	}
+	for (int i = 1; i <= K; i++)
+	{
+		printf("%d %d\n", i,vi[i].size());
+		sort(vi[i].begin(), vi[i].end(),cmp);
+		for (int k = 0; k < vi[i].size(); k++)
+		{
+			printf("%s\n",name[vi[i][k]]);
+		}
+	}
+	system("pause");
+	return 0;
+}
