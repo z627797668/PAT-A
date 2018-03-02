@@ -1,0 +1,39 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<map>
+using namespace std;
+map<int, int>mp;
+int main()
+{
+	int N, M;
+	scanf("%d %d", &N, &M);
+	int now;
+	int pre;
+	getchar();
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < M; j++)
+		{
+			scanf("%d",&now);
+			if (mp[pre] == 0)
+			{
+				mp[now]++;
+				pre = now;
+			}
+			else
+			{
+				if (now == pre)
+				{
+					mp[pre]++;
+				}
+				else
+				{
+					mp[pre]--;
+				}
+			}
+		}
+	}
+	printf("%d",now);
+	system("pause");
+	return 0;
+}
