@@ -1,0 +1,74 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<queue>
+using namespace std;
+const int maxn = 1005;
+struct node
+{
+	int rank;
+	int weight;
+}p[maxn];
+queue<int>q;
+int main()
+{
+	int Np, Ng;
+	int all;
+	scanf("%d %d", &Np, &Ng);
+	all = Np;
+	for (int i = 0; i < Np; i++)
+	{
+		scanf("%d", &p[i].weight);
+	}
+	int temp;
+	for (int i = 0; i < Np; i++)
+	{
+		scanf("%d", &temp);
+		q.push(temp);
+	}
+	while (1)
+	{
+		int group;
+		if (Np%Ng == 0)
+			group = Np / Ng;
+		else
+			group = Np / Ng + 1;
+		if (q.size() == 1)
+		{
+			group = q.front();
+			q.pop();
+			p[group].rank = 1;
+			break;
+		}
+			int temp,max;
+		for (int i = 0; i < Np; i++)
+		{
+			if (i%Ng == 0)
+			{
+				if (i > 0)
+					q.push(max);
+				max = q.front();
+				q.pop();
+				p[max].rank = group + 1;
+			}
+			else {
+				temp = q.front();
+				q.pop();
+				p[temp].rank = group + 1;
+				if (p[temp].weight > p[max].weight)
+				{
+					max = temp;
+				}
+			}
+		}
+		q.push(max);
+		Np = q.size();
+	}
+	for (int i = 0; i < all; i++)
+	{
+		printf("%d", p[i].rank);
+		if (i != all - 1)
+			printf(" ");
+	}
+	system("pause");
+	return 0;
+}
