@@ -1,0 +1,138 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string>
+#include<map>
+#include<algorithm>
+#include<iostream>
+#include<vector>
+using namespace std;
+map<string,vector<int>>tit;
+map<string,vector<int>>aut;
+map<string,vector<int>>ke;
+map<string,vector<int>>pub;
+map<int,vector<int>>yea;
+int main()
+{
+	int N;
+	int id;
+	string title;
+	string author;
+	string key;
+	string publisher;
+	int year;
+	scanf("%d", &N);
+	for (int i = 0; i < N; i++)
+	{
+		scanf("%d", &id);
+		getchar();
+		getline(cin, title);
+		getline(cin, author);
+		getline(cin, key);
+		getline(cin, publisher);
+		scanf("%d", &year);
+		tit[title].push_back(id);
+		aut[author].push_back(id);
+		pub[publisher].push_back(id);
+		yea[year].push_back(id);
+		int len = key.size();
+		string temp;
+		for (int i = 0; i <len ; i++)
+		{
+			if (key[i] != ' ')
+			{
+				temp += key[i];
+			}
+			else
+			{
+				ke[temp].push_back(id);
+				temp.clear();
+			}
+		}
+		ke[temp].push_back(id);
+	}
+	int M;
+	int count = 0;
+	scanf("%d", &M);
+	getchar();
+	string check;
+	while (count<M)
+	{
+		count++;
+		getline(cin, check);
+		cout << check << endl;
+		if (check[0] == '1')
+		{
+			check.erase(0, 3);
+			bool p = false;
+			sort(tit[check].begin(), tit[check].end());
+			for (int i = 0; i < tit[check].size(); i++)
+			{
+				p = true;
+				printf("%07d\n", tit[check][i]);
+			}
+			if (p == false)
+				printf("Not Found\n");
+		}
+		else if (check[0] == '2')
+		{
+			bool p = false;
+			check.erase(0, 3);
+			sort(aut[check].begin(), aut[check].end());
+			for (int i = 0; i < aut[check].size(); i++)
+			{
+				p = true;
+				printf("%07d\n", aut[check][i]);
+			}
+			if (p == false)
+				printf("Not Found\n");
+		}
+		else if (check[0] == '3')
+		{
+			bool p = false;
+			check.erase(0, 3);
+			sort(ke[check].begin(), ke[check].end());
+			for (int i = 0; i < ke[check].size(); i++)
+			{
+				p = true;
+				printf("%07d\n", ke[check][i]);
+			}
+			if (p == false)
+				printf("Not Found\n");
+		}
+		else if (check[0] == '4')
+		{
+			bool p = false;
+			check.erase(0, 3);
+			sort(pub[check].begin(), pub[check].end());
+			for (int i = 0; i < pub[check].size(); i++)
+			{
+				p = true;
+				printf("%07d\n", pub[check][i]);
+			}
+			if (p == false)
+				printf("Not Found\n");
+		}
+		else if (check[0] == '5')
+		{
+			bool p = false;
+			check.erase(0, 3);
+			int num = 0;
+			if (check.size() == 4) {
+				for (int k = 0; k < check.size(); k++)
+				{
+					num = num * 10 + check[k] - '0';
+				}
+				sort(yea[num].begin(), yea[num].end());
+				for (int i = 0; i < yea[num].size(); i++)
+				{
+					p = true;
+					printf("%07d\n", yea[num][i]);
+				}
+			}
+			if (p == false)
+				printf("Not Found\n");
+		}
+	}
+	system("pause");
+	return 0;
+}
