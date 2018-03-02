@@ -1,0 +1,42 @@
+#include<stdio.h>
+#include<stdlib.h>
+const int maxn = 100005;
+struct Node
+{
+	int next;
+	char c;
+	bool flag;
+}node[maxn];
+int main()
+{
+	int N;
+	int st1, st2;
+	int tnow, tnext;
+	char cc;
+	scanf("%d %d %d", &st1, &st2, &N);
+	for (int i = 0; i < N; i++)
+	{
+		scanf("%d %c %d", &tnow, &cc, &tnext);
+		node[tnow].next = tnext;
+		node[tnow].flag = false;
+	}
+	tnow = st1;
+	do
+	{
+		node[tnow].flag = true;
+		tnow = node[tnow].next;
+	} while (tnow!=-1);
+	tnow = st2;
+	while (node[tnow].flag==false&&tnow!=-1)
+	{
+		tnow = node[tnow].next;
+	}
+	if (tnow == -1)
+		printf("-1");
+	else
+	{
+		printf("%05d", tnow);
+	}
+	system("pause");
+	return 0;
+}
