@@ -1,0 +1,43 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<stack>
+using namespace std;
+const int maxn = 1005;
+int main()
+{
+	int M, N, K;
+	stack<int>st;
+	int num[maxn];
+	scanf("%d %d %d", &M, &N, &K);
+	while (K--)
+	{
+		while (st.empty()==false)
+		{
+			st.pop();
+		}
+		for (int i = 0; i <N; i++)
+		{
+			scanf("%d", &num[i]);
+		}
+		int val = 0;
+		for (int i = 1; i <= N; i++)
+		{
+			st.push(i);
+			while (!st.empty()&&st.top() == num[val])
+			{
+				val++;
+				st.pop();
+			}
+			if (st.size() >= M)
+			{
+				break;
+			}
+		}
+		if (st.size() == 0)
+			printf("YES\n");
+		else
+			printf("NO\n");
+	}
+	system("pause");
+	return 0;
+}
