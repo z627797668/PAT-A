@@ -1,0 +1,57 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string>
+#include<map>
+#include<iostream>
+using namespace std;
+map<string, int>mp;
+const int maxn = 1048578;
+char s[maxn];
+int main()
+{
+	gets_s(s);
+	int len = strlen(s);
+	string str;
+	int i = 0;
+	for (; i < len; i++)
+	{
+		if (s[i] >= 'a'&&s[i] <= 'z')
+		{
+			str += s[i];
+		}
+		else if(s[i] >= 'A'&&s[i] <= 'Z')
+		{
+			str += (s[i] - 'A' + 'a');
+		}
+		else if (s[i] >= '0'&&s[i] <= '9')
+		{
+			str += s[i];
+		}
+		else
+		{
+			if (str.size() != 0)
+			{
+				mp[str]++;
+				str.clear();
+			}
+		}
+	}
+	if (str.size() != 0)
+	{
+		mp[str]++;
+		str.clear();
+	}
+	int max=0;
+	for (map<string,int>::iterator it=mp.begin();it!=mp.end();it++)
+	{
+		if (it->second > max)
+		{
+			str = it->first;
+			max = it->second;
+		}
+	}
+	cout << str;
+	printf(" %d", max);
+	system("pause");
+	return 0;
+}
