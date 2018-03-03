@@ -1,0 +1,89 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<queue>
+using namespace std;
+const int maxm = 1286;
+const int maxn = 128;
+const int maxl = 60;
+int matrix[maxm][maxn][maxl];
+bool inq[maxm][maxn][maxl] = { false };
+int M, N, L, T;
+int X[6] = { 0,0,0,0,1,-1 };
+int Y[6] = { 0,0,1,-1,0,0 };
+int Z[6] = { 1,-1,0,0,0,0 };
+bool test(int x, int y, int z)
+{
+	if (x < 0 || x >= maxm || y < 0 || y >= maxn || z < 0 || z >= maxl)return false;
+	if (matrix[x][y][z] == 0||inq[x][y][z]==true)return false;
+	return true;
+}
+struct node
+{
+	int x;
+	int y;
+	int z;
+}Node;
+int BFS(int x, int y, int z)
+{
+	int count = 1;
+	queue<node>q;
+	inq[x][y][z]=true;
+	Node.x = x;
+	Node.y = y;
+	Node.z = z;
+	q.push(Node);
+	while (!q.empty())
+	{
+		node top = q.front();
+		q.pop();
+		for (int i = 0; i < 6; i++)
+		{
+			int newX = top.x + X[i];
+			int newY = top.y + Y[i];
+			int newZ = top.z + Z[i];
+			if (test(newX, newY, newZ))
+			{
+				count++;
+				Node.x = newX;
+				Node.y = newY;
+				Node.z = newZ;
+				inq[newX][newY][newZ] = true;
+				q.push(Node);
+			}
+		}
+	}
+	if (count >= T)
+		return count;
+	else return 0;
+}
+int main()
+{
+	scanf("%d %d %d %d", &M, &N, &L, &T);
+	for (int i = 0; i < L; i++)
+	{
+		for (int j = 0; j < M; j++)
+		{
+			for (int k = 0; k < N; k++)
+			{
+				scanf("%d", &matrix[j][k][i]);
+			}
+		}
+	}
+	int ans = 0;
+	for (int i = 0; i < L; i++)
+	{
+		for (int j = 0; j < M; j++)
+		{
+			for (int k = 0; k < N; k++)
+			{
+				if (matrix[j][k][i] == 1 && inq[j][k][i] == false)
+				{
+					ans += BFS(j, k, i);
+				}
+			}
+		}
+	}
+	printf("%d", ans);
+	system("pause");
+	return 0;
+}
