@@ -1,0 +1,29 @@
+#include<stdio.h>
+#include<stdlib.h>
+int main()
+{
+	int N;
+	int now = 0;
+	int to;
+	int ans = 0;
+	scanf("%d", &N);
+	while (N--)
+	{
+		scanf("%d", &to);
+		if (to>now)
+		{
+			ans += (to - now) * 6;
+				ans += 5;
+				now = to;
+		}
+		else
+		{
+			ans += (now - to) * 4;
+			ans += 5;
+			now = to;
+		}
+	}
+	printf("%d", ans);
+	system("pause");
+	return 0;
+}
