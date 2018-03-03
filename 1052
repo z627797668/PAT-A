@@ -1,0 +1,54 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<algorithm>
+using namespace std;
+const int maxn = 100005;
+struct Node
+{
+	int address;
+	int data;
+	int flag=0;
+	int next;
+}node[maxn];
+bool cmp(Node a, Node b)
+{
+	if (a.flag != b.flag)return a.flag > b.flag;
+	else return a.data < b.data;
+}
+int main()
+{
+	int N,head,tnow,tnext,tdata;
+	scanf("%d %d", &N, &head);
+	for (int i = 0; i < N; i++)
+	{
+		scanf("%d %d %d", &tnow, &tdata, &tnext);
+		node[tnow].data = tdata;
+		node[tnow].next = tnext;
+		node[tnow].address = tnow;
+	}
+	int count = 0;
+	tnow = head;
+	while (tnow != -1)
+	{
+		count++;
+		node[tnow].flag = 1;
+		tnow = node[tnow].next;
+	}
+	sort(node, node + maxn, cmp);
+	if (count != 0) {
+		printf("%d %05d\n", count, node[0].address);
+		for (int i = 0; i < count; i++)
+		{
+			if (i != count - 1)
+				printf("%05d %d %05d\n", node[i].address, node[i].data, node[i + 1].address);
+			else
+				printf("%05d %d -1\n", node[i].address, node[i].data);
+		}
+	}
+	else
+	{
+		printf("0 -1");
+	}
+	system("pause");
+	return 0;
+}
