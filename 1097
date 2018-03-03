@@ -1,0 +1,79 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<algorithm>
+using namespace std;
+const int maxn = 100005;
+const int maxk = 10005;
+bool hashtable[maxk] = { false };
+struct Node
+{
+	int data;
+	int address;
+	int next;
+	int flag = 0;
+	int st = 0;
+}node[maxn];
+bool cmp(Node a, Node b)
+{
+	if (a.flag != b.flag)return a.flag > b.flag;
+	else return a.st < b.st;
+}
+int main()
+{
+	int head, N;
+	scanf("%d %d", &head, &N);
+	int tnow, tnext, tdata;
+	for (int i = 0; i < N; i++)
+	{
+		scanf("%d %d %d", &tnow, &tdata, &tnext);
+		node[tnow].data = tdata;
+		node[tnow].address = tnow;
+		node[tnow].next = tnext;
+	}
+	int count1 = 0,count2=0;
+	tnow = head;
+	int st = 0;
+	while (tnow!=-1)
+	{
+		tdata = node[tnow].data;
+		node[tnow].st = st++;
+		if (tdata < 0)tdata = -tdata;
+		if (hashtable[tdata] == false)
+		{
+			count1++;
+			hashtable[tdata] = true;
+			node[tnow].flag = 2;
+		}
+		else
+		{
+			count2++;
+			node[tnow].flag = 1;
+		}
+		tnow = node[tnow].next;
+	}
+	sort(node, node+maxn, cmp);
+	for (int i = 0; i < count1; i++)
+	{
+		if (i != count1 - 1)
+		{
+			printf("%05d %d %05d\n", node[i].address, node[i].data, node[i + 1].address);
+		}
+		else
+		{
+			printf("%05d %d -1\n", node[i].address, node[i].data);
+		}
+	}
+	for (int i = count1; i < count2+count1; i++)
+	{
+		if (i != count2+count1 - 1)
+		{
+			printf("%05d %d %05d\n", node[i].address, node[i].data, node[i + 1].address);
+		}
+		else
+		{
+			printf("%05d %d -1\n", node[i].address, node[i].data);
+		}
+	}
+	system("pause");
+	return 0;
+}
