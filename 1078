@@ -1,0 +1,67 @@
+#include<stdio.h>
+#include<stdlib.h>
+const int maxn = 19999;
+int prime[maxn], pNum = 0;
+bool p[maxn] = { false };
+bool inq[maxn] = { false };
+void Find_prime()
+{
+	for (int i = 2; i < maxn; i++)
+	{
+		if (p[i] == false)
+		{
+			prime[pNum++] = i;
+			for (int j = i+i; j < maxn; j+=i)
+			{
+				p[j] = true;
+			}
+		}
+	}
+}
+int main()
+{
+	Find_prime();
+	int Msize, N;
+	scanf("%d %d", &Msize, &N);
+	int i;
+	for (i = 0; i < pNum; i++)
+	{
+		if (prime[i] >= Msize)
+		{
+			break;
+		}
+	}
+	Msize = prime[i];
+	int temp;
+	int go;
+	for (int k = 0; k < N; k++)
+	{
+		scanf("%d", &temp);
+		 go= temp % Msize;
+		 if (inq[go] == false)
+		 {
+			 inq[go] =true;
+			 printf("%d", go);
+		 }
+		 else
+		 {
+			 int j;
+			 for (j = 1; j < Msize; j++)
+			 {
+				 go = (temp + j * j) % Msize;
+				 if (inq[go] == false)
+				 {
+					 inq[go] = true;
+					 printf("%d", go);
+					 break;
+				 }
+			 }
+			 if (j == Msize)
+				 printf("-");
+		 }
+		 if (k != N - 1)
+			 printf(" ");
+	}
+	system("pause");
+	return 0;
+}
