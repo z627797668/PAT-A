@@ -1,0 +1,32 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+int num[40];
+int main()
+{
+	int N;
+	int count = 0;
+	scanf("%d", &N);
+	int right = 0;
+	int left = N;
+	int num = 0;
+	int ans = 0;
+	int k = 0;
+	while (left != 0)
+	{
+		num = left % 10;
+		left = left / 10;
+		if (num == 0)
+			ans += left * pow(10, k);
+		else if (num == 1)
+			ans += left*pow(10,k)+right+1;
+		else
+			ans += (left + 1)*pow(10, k);
+		k++;
+		int temp = pow(10, k);
+		right = N %temp;
+	}
+	printf("%d", ans);
+	system("pause");
+	return 0;
+}
