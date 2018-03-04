@@ -1,0 +1,54 @@
+#include<stdio.h>
+#include<stdlib.h>
+const int maxn = 100005;
+bool p[maxn] = { false };
+int z[40], num = 0;
+void Find_Prime()
+{
+	p[1] = true;
+	for (int i = 2; i < maxn; i++)
+	{
+		if (p[i] == false)
+		{
+			for (int j = i+i; j < maxn; j+=i)
+			{
+				p[j] = true;
+			}
+		}
+	}
+}
+int main()
+{
+	Find_Prime();
+	int N, D;
+	while (scanf("%d",&N))
+	{
+		if (N < 0)
+			break;
+		scanf("%d", &D);
+		if (p[N] == true)
+		{
+			printf("No\n");
+		}
+		else
+		{
+			num = 0;
+			do
+			{
+				z[num++] = N % D;
+				N /= D;
+			} while (N!=0);
+			int ans = 0;
+			for (int i = 0; i<num; i++)
+			{
+				ans = ans * D + z[i];
+			}
+			if (p[ans] == true)
+				printf("No\n");
+			else
+				printf("Yes\n");
+		}
+	}
+	system("pause");
+	return 0;
+}
