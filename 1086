@@ -1,0 +1,76 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<stack>
+#include<string.h>
+using namespace std;
+const int maxn = 35;
+int N;
+int pre[maxn], in[maxn];
+struct node
+{
+	int data;
+	node*lchild;
+	node*rchild;
+};
+node*create(int preL, int preR, int inL, int inR)
+{
+	if (preL > preR)
+		return NULL;
+	node*root = new node;
+	root->data = pre[preL];
+	int k;
+	for ( k = inL; k < inR; k++)
+	{
+		if (pre[preL] == in[k])
+			break;
+	}
+	int numk = k - inL;
+	root->lchild = create(preL+1, preL + numk , inL, k - 1);
+	root->rchild = create(preL + numk + 1, preR, k + 1, inR);
+	return root;
+}
+int nump = 0;
+void postorder(node*root)
+{
+	if (root == NULL)
+		return;
+	postorder(root->lchild);
+	postorder(root->rchild);
+	printf("%d", root->data);
+	nump++;
+	if (nump != N)
+		printf(" ");
+}
+int main()
+{
+	stack<int>st;
+	int pnum = 0;
+	int innum = 0;
+	scanf("%d", &N);
+	char str[25];
+	getchar();
+	for (int i = 0; i < 2*N; i++)
+	{
+		gets_s(str);
+		int len = strlen(str);
+		if (len == 3)
+		{
+			in[innum++] = st.top();
+			st.pop();
+		}
+		else
+		{
+			int temp = 0;
+			for (int i = 5; i < len; i++)
+			{
+				temp = temp * 10 + str[i] - '0';
+			}
+			st.push(temp);
+			pre[pnum++] = temp;
+		}
+	}
+	node*root = create(0, N - 1, 0, N - 1);
+	postorder(root);
+	system("pause");
+	return 0;
+}
