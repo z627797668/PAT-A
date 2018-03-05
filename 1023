@@ -1,0 +1,69 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+int hashtable[10] = { 0 };
+struct bign
+{
+	int d[25];
+	int len;
+	bign()
+	{
+		memset(d, 0, sizeof(d));
+		len = 0;
+	}
+};
+bign change(char str[])
+{
+	bign a;
+	a.len = strlen(str);
+	for (int i = 0; i < a.len; i++)
+	{
+		a.d[i] = str[a.len - 1 - i] - '0';
+		hashtable[a.d[i]]++;
+	}
+	return a;
+}
+bign mul(bign a, int p)
+{
+	int carry=0;
+	for (int i = 0; i <a.len; i++)
+	{
+		carry = carry + a.d[i]*p;
+		a.d[i] = carry % 10;
+		carry /= 10;
+	}
+	while (carry!=0)
+	{
+		a.d[a.len++] = carry % 10;
+		carry /= 10;
+	}
+	return a;
+}
+int main()
+{
+	char str[25];
+	int p = 2;
+	scanf("%s", str);
+	bign a = change(str);
+	a = mul(a, p);
+	for (int i = 0; i < a.len; i++)
+	{
+		hashtable[a.d[i]]--;
+	}
+	int j = 0;
+	for ( ; j < 10; j++)
+	{
+		if (hashtable[j] != 0)
+			break;
+	}
+	if (j == 10)
+		printf("Yes\n");
+	else
+		printf("No\n");
+	for (int i = a.len-1; i >=0; i--)
+	{
+		printf("%d",a.d[i]);
+	}
+	system("pause");
+	return 0;
+}
