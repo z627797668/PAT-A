@@ -1,0 +1,81 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<vector>
+using namespace std;
+const int maxn = 1005;
+bool hashru[128] = { false };
+bool hashtable[128] = { false };
+char c[maxn], cNum = 0;
+int main()
+{
+	char str[maxn];
+	int k;
+	vector<char>vi;
+	scanf("%d", &k);
+	scanf("%s", str);
+	int len = strlen(str);
+	int countthis = 0;
+	for (int i = 0; i <len ; i++)
+	{
+		if (i + 1 < len)
+		{
+			if (str[i] == str[i + 1])
+			{
+				countthis++;
+			}
+			else
+			{
+				countthis++;
+				if (countthis < k||countthis%k!=0)
+				{
+					hashtable[str[i]] = true;
+				}
+				countthis = 0;
+			}
+		}
+		else
+		{
+			if (str[i] == str[i - 1])
+			{
+				countthis++;
+				if (countthis < k || countthis % k != 0)
+				{
+					hashtable[str[i]] = true;
+				}
+			}
+			else
+			{
+				hashtable[str[i]] = true;
+			}
+		}
+	}
+	for (int i = 0; i < len; i++)
+	{
+		if (hashtable[str[i]] == false&&hashru[str[i]]==false)
+		{
+			hashru[str[i]] = true;
+			c[cNum++] = str[i];
+		}
+	}
+	for (int i = 0; i < cNum; i++)
+	{
+		printf("%c", c[i]);
+	} 
+	printf("\n");
+	int kk = 0;
+	while (kk<len)
+	{
+		if (hashtable[str[kk]] == true) {
+			printf("%c", str[kk]);
+			kk++;
+		}
+		else
+		{
+			printf("%c", str[kk]);
+			kk += k;
+		}
+	}
+	system("pause");
+	return 0;
+}
