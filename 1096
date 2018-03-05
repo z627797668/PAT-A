@@ -1,0 +1,63 @@
+#include<stdio.h>
+#include<math.h>
+#include<stdlib.h>
+#include<vector>
+using namespace std;
+/*const int maxn = 100005;
+int prime[maxn], pNum = 0;
+bool p[maxn] = { false };
+void Find_prime()
+{
+	for (int i = 2; i < maxn; i++)
+	{
+		if (p[i] == false)
+		{
+			prime[pNum++] = i;
+			for (int j= i+i; j < maxn; j+=i)
+			{
+				if (p[j] == false)
+					p[j] = true;
+			}
+		}
+	}
+}*/
+int main()
+{
+	long long N;
+	scanf("%lld", &N);
+	long long sqr = sqrt(N);
+	vector<long> ans, temp;
+	long long t;
+	for (long long i = 2; i <= sqr; i++)
+	{
+		t = N;
+		temp.clear();
+		if (t%i == 0)
+		{
+			long long k = i;
+			while (t%k==0)
+			{
+				temp.push_back(k);
+				t /= k;
+				k++;
+			}
+			if (temp.size() > ans.size())
+				ans = temp;
+		}
+	}
+	if (ans.size() == 0)
+		printf("1\n%lld", N);
+	else
+	{
+		printf("%d\n", ans.size());
+		for (int i = 0; i < ans.size(); i++)
+		{
+			if (i == 0)
+				printf("%lld", ans[i]);
+			else
+				printf("*%lld", ans[i]);
+		}
+	}
+	system("pause");
+	return 0;
+}
