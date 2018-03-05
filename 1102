@@ -1,0 +1,84 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<queue>
+using namespace std;
+int N;
+const int maxn = 15;
+int hashtable[maxn] = { false };
+struct Node
+{
+	int lchild = -1;
+	int rchild = -1;
+}node[maxn];
+void rev(int &root)
+{
+	if (root == -1)
+		return;
+	rev(node[root].lchild);
+	rev(node[root].rchild);
+	int temp = node[root].lchild;
+	node[root].lchild = node[root].rchild;
+	node[root].rchild = temp;
+}
+int levelprin = 0;
+void levelorder(int root)
+{
+	queue<int>q;
+	q.push(root);
+	while (!q.empty())
+	{
+		int now = q.front();
+		q.pop();
+		printf("%d", now);
+		levelprin++;
+		if (levelprin != N)
+			printf(" ");
+		if (node[now].lchild != -1)q.push(node[now].lchild);
+		if (node[now].rchild != -1)q.push(node[now].rchild);
+	}
+}
+int innum = 0;
+void inorder(int root)
+{
+	if (root == -1)
+		return;
+	inorder(node[root].lchild);
+	printf("%d", root);
+	innum++;
+	if (innum != N)
+		printf(" ");
+	inorder(node[root].rchild);
+}
+int main()
+{
+	scanf("%d", &N);
+	int root;
+	for (int i = 0; i < N; i++)
+	{
+		char c1,c2;
+		getchar();
+		scanf("%c %c", &c1, &c2);
+		if (c1 == '-')
+			node[i].lchild = -1;
+		else {
+			node[i].lchild = c1 - '0';
+			hashtable[c1 - '0'] = true;
+		}if (c2 == '-')
+			node[i].rchild = -1;
+		else {
+			node[i].rchild = c2 - '0';
+			hashtable[c2 - '0'] = true;
+		}
+	}
+	for (int i = 0; i < N; i++)
+	{
+		if (hashtable[i] == false)
+			root = i;
+	}
+	rev(root);
+	levelorder(root);
+	printf("\n");
+	inorder(root);
+	system("pause");
+	return 0;
+}
