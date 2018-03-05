@@ -1,0 +1,110 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+const int maxn = 12;
+struct bign
+{
+	int d[1000];
+	int len;
+	bign()
+	{
+		memset(d, 0, sizeof(d));
+		len = 0;
+	}
+};
+bign change(char str[])
+{
+	bign a;
+	a.len	= strlen(str);
+	for (int i = 0; i < a.len; i++)
+	{
+		a.d[i] = str[a.len - 1 - i] - '0';
+	}
+	return a;
+}
+bool rev(bign a)
+{
+	for (int i = 0; i < a.len / 2; i++)
+	{
+		if (a.d[i] != a.d[a.len - 1 - i])
+			return false;
+	}
+	return true;
+}
+bign reveser(bign a)
+{
+	bign b;
+	b.len = 0;
+	for (int i = a.len-1; i >=0; i--)
+	{
+		b.d[b.len++] = a.d[i];
+	}
+	return b;
+}
+bign add(bign a, bign b)
+{
+	bign c;
+	c.len = 0;
+	int carry = 0;
+	for (int i = 0; i <a.len||i<b.len; i++)
+	{
+		carry = a.d[i] + b.d[i] + carry;
+		c.d[c.len++] = carry % 10;
+		carry /= 10;
+	}
+	if (carry != 0)
+	{
+		c.d[c.len++] = carry;
+	}
+	return c;
+}
+int main()
+{
+	int K;
+	char str[12];
+	scanf("%s", str);
+	scanf("%d", &K);
+	bign a = change(str);
+	bign b;
+	b = reveser(a);
+	if (rev(a) == true)
+	{
+		for (int i = a.len-1; i >=0; i--)
+		{
+			printf("%d", a.d[i]);
+		}
+		printf("\n0");
+	}
+	else
+	{
+		bool t = false;
+		for (int i = 1; i <= K; i++)
+		{
+			a = add(a, b);
+			if (rev(a) == true)
+			{
+				t = true;
+				for (int j = a.len-1; j >= 0; j--)
+				{
+					printf("%d", a.d[j]);
+				}
+				printf("\n%d", i);
+				break;
+			}
+			else
+			{
+				b = reveser(a);
+			}
+		}
+		if (t == false)
+		{
+			for (int j = a.len - 1; j >= 0; j--)
+			{
+				printf("%d", a.d[j]);
+			}
+			printf("\n%d", K);
+		}
+	}
+	system("pause");
+	return 0;
+}
