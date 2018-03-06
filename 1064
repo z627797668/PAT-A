@@ -1,0 +1,38 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<algorithm>
+using namespace std;
+const int maxn = 1005;
+int CBT[maxn];
+int num[maxn];
+int N;
+int pnum = 0;
+void inorder(int root)
+{
+	if (root > N)
+		return;
+	else
+	{
+		inorder(2 * root);
+		CBT[root] = num[pnum++];
+		inorder(2 * root + 1);
+	}
+}
+int main()
+{
+	scanf("%d", &N);
+	for (int i = 0; i < N; i++)
+	{
+		scanf("%d", &num[i]);
+	}
+	sort(num, num + N);
+	inorder(1);
+	for (int i = 1; i <=N; i++)
+	{
+		printf("%d", CBT[i]);
+		if (i != N)
+			printf(" ");
+	}
+	system("pause");
+	return 0;
+}
