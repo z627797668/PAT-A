@@ -1,0 +1,118 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<vector>
+using namespace std;
+const int maxn = 1005;
+int N;
+vector<int>vi,temp;
+struct node
+{
+	int data;
+	node*lchild;
+	node*rchild;
+};
+node*newNode(int x)
+{
+	node*root = new node;
+	root->data = x;
+	root->lchild = root->rchild = NULL;
+	return root;
+}
+void intsert(node*&root, int x)
+{
+	if (root == NULL)
+	{
+		root = newNode(x);
+	}
+	else {
+		if (root->data > x)
+		{
+			intsert(root->lchild, x);
+		}
+		else
+			intsert(root->rchild, x);
+	}
+}
+void preorder(node*root)
+{
+	if (root == NULL)
+		return;
+	temp.push_back(root->data);
+	preorder(root->lchild);
+	preorder(root->rchild);
+}
+int sump = 0;
+void postorder(node*root)
+{
+	if (root == NULL)
+		return;
+	else
+	{
+		postorder(root->lchild);
+		postorder(root->rchild);
+		printf("%d", root->data);
+		sump++;
+		if (sump != N )
+			printf(" ");
+	}
+}
+void change(node*root)
+{
+	if (root == NULL)
+		return;
+	else
+	{
+		change(root->lchild);
+		change(root->rchild);
+		node*t = root->lchild;
+		root->lchild = root->rchild;
+		root->rchild = t;
+	}
+}
+int main()
+{
+	int tempt;
+	scanf("%d", &N);
+	node*root = new node;
+	root = NULL;
+	for (int i = 0; i < N; i++)
+	{
+		scanf("%d", &tempt);
+		vi.push_back(tempt);
+		intsert(root, tempt);
+	}
+	preorder(root);
+	int k;
+	for ( k = 0; k <N ; k++)
+	{
+		if (vi[k] != temp[k])
+			break;
+	}
+	if (k == N)
+	{
+		printf("YES\n");
+		postorder(root);
+	}
+	else
+	{
+		temp.clear();
+		change(root);
+		preorder(root);
+		for (k = 0; k <N; k++)
+		{
+			if (vi[k] != temp[k])
+				break;
+		}
+		if (k == N)
+		{
+			printf("YES\n");
+			postorder(root);
+		}
+		else
+		{
+			printf("NO");
+		}
+	}
+	system("pause");
+	return 0;
+}
