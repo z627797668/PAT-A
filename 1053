@@ -1,0 +1,81 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<algorithm>
+#include<vector>
+using namespace std;
+const int maxn = 105;
+int N, M, S;
+int ansn[maxn];
+struct Node
+{
+	int weight;
+	vector<int> child;
+}node[maxn];
+vector<int>temp, ans[maxn];
+int ansnum = 0;
+int tempsum = 0;
+bool cmp(int a,int b)
+{
+	int lena = ans[ansn[a]].size();
+	int lenb = ans[ansn[b]].size();
+	for (int i = 0; i <lena&&i<lenb; i++)
+	{
+		if (ans[ansn[a]][i] != ans[ansn[b]][i])
+		{
+			return ans[ansn[a]][i] > ans[ansn[b]][i];
+		}
+	}
+	return false;
+}
+void preorder(int root)
+{
+	temp.push_back(node[root].weight);
+	tempsum += node[root].weight;
+	if (tempsum == S && node[root].child.size() == 0)
+	{
+		ans[ansnum++] = temp;
+	}
+	for (int i = 0; i < node[root].child.size(); i++)
+	{
+		preorder(node[root].child[i]);
+		temp.pop_back();
+		tempsum -= node[node[root].child[i]].weight;
+	}
+}
+int main()
+{
+	scanf("%d %d %d", &N, &M, &S);
+	for (int i = 0; i < N; i++)
+	{
+		scanf("%d", &node[i].weight);
+	}
+	int id,K;
+	for (int i = 0; i < M; i++)
+	{
+		scanf("%d %d", &id, &K);
+		int idt;
+		for (int j = 0; j < K; j++)
+		{
+			scanf("%d", &idt);
+			node[id].child.push_back(idt);
+		}
+	}
+	preorder(0);
+	for (int i = 0; i < ansnum; i++)
+	{
+		ansn[i] = i;
+	}
+	sort(ansn,ansn+ansnum , cmp);
+	for (int i = 0; i < ansnum; i++)
+	{
+		for (int j = 0; j < ans[ansn[i]].size(); j++)
+		{
+			printf("%d", ans[ansn[i]][j]);
+			if (j != ans[ansn[i]].size() - 1)
+				printf(" ");
+		}
+		printf("\n");
+	}
+	system("pause");
+	return 0;
+}
