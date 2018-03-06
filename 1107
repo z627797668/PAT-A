@@ -1,0 +1,94 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<vector>
+#include<algorithm>
+using namespace std;
+int N;
+const int maxn = 1005;
+int hashtable[maxn] = { 0 };
+int father[maxn];
+vector<int>course[maxn];
+int cou[maxn];
+int validcou = 0;
+bool cmp(int a, int b)
+{
+	return a > b;
+}
+void init(int n)
+{
+	for (int i = 1; i <=n; i++)
+	{
+		hashtable[i] = 0;
+		father[i] = i;
+	}
+}
+int findFather(int x)
+{
+	int a = x;
+	while (x!=father[x])
+	{
+		x = father[x];
+	}
+	while (a!=father[a])
+	{
+		int z = a;
+		a = father[a];
+		father[z] = x;
+	}
+	return x;
+}
+void Union(int a, int b)
+{
+	int faA = findFather(a);
+	int faB = findFather(b);
+	if (faA != faB)
+		father[faA] = faB;
+}
+int main()
+{
+	scanf("%d", &N);
+	init(N);
+	int k;
+	for (int i = 1; i <= N; i++)
+	{
+		scanf("%d", &k);
+		getchar();
+		int temp;
+		for (int j = 0; j < k; j++)
+		{
+			scanf("%d", &temp);
+			if (course[temp].size() == 0)
+			{
+				cou[validcou++] = temp;
+			}
+			course[temp].push_back(i);
+		}
+	}
+	for (int i = 0; i < validcou; i++)
+	{
+		if (course[cou[i]].size() >= 2)
+		{
+			for (int j = 0; j < course[cou[i]].size()-1; j++)
+			{
+				Union(course[cou[i]][j], course[cou[i]][j + 1]);
+			}
+		}
+	}
+	int coup = 0;
+	for (int i = 1; i <= N; i++)
+	{
+		if (findFather(i) == i)
+			coup++;
+		hashtable[findFather(i)]++;
+	}
+	sort(hashtable + 1, hashtable + N+1, cmp);
+	printf("%d\n", coup);
+	for (int i = 1; i <= coup; i++)
+	{
+		printf("%d", hashtable[i]);
+		if (i != coup)
+			printf(" ");
+	}
+	system("pause");
+	return 0;
+}
