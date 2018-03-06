@@ -1,0 +1,52 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<vector>
+#include<math.h>
+using namespace std;
+int N;
+double P, r;
+const int maxn = 100005;
+double maxprice;
+int nump, maxd = 0;
+struct Node
+{
+	vector<int>child;
+}node[maxn];
+void preorder(int root,int depth)
+{
+	if (node[root].child.size() == 0) {
+		if (depth > maxd)
+		{
+			nump = 1;
+			maxd = depth;
+		}
+		else if (depth == maxd)
+		{
+			nump++;
+		}
+	}
+	for (int i = 0; i < node[root].child.size(); i++)
+	{
+		preorder(node[root].child[i], depth + 1);
+	}
+}
+int main()
+{
+	scanf("%d", &N);
+	scanf("%lf %lf", &P, &r);
+	int temp,root;
+	for (int i = 0; i < N; i++)
+	{
+		scanf("%d", &temp);
+		if (temp == -1)
+			root = i;
+		else
+		{
+			node[temp].child.push_back(i);
+		}
+	}
+	preorder(root, 0);
+	printf("%.2lf %d", P*pow((1.0)*(100 + r) / 100, maxd), nump);
+	system("pause");
+	return 0;
+}
