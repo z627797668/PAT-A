@@ -1,0 +1,62 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<vector>
+#include<queue>
+#include<math.h>
+using namespace std;
+const int maxn = 100005;
+struct Node
+{
+	int level;
+	vector<int>child;
+	int count;
+}node[maxn];
+double ans;
+int N;
+double P;
+double r;
+void BFS(int root)
+{
+	queue<int>q;
+	q.push(root);
+	while (!q.empty())
+	{
+		int front = q.front();
+		q.pop();
+		if (node[front].child.size() == 0)
+		{
+			ans += P * pow(((1.0)*(100 + r)/100), node[front].level)*node[front].count;
+		}
+		for (int i = 0; i < node[front].child.size(); i++)
+		{
+			node[node[front].child[i]].level = node[front].level + 1;
+			q.push(node[front].child[i]);
+		}
+	}
+}
+int main()
+{
+	int k;
+	scanf("%d %lf %lf", &N, &P, &r);
+	for (int i = 0; i < N; i++)
+	{
+		scanf("%d", &k);
+		int temp;
+		if (k == 0)
+		{
+			scanf("%d", &temp);
+			node[i].count = temp;
+		}
+		else {
+			for (int j = 0; j < k; j++)
+			{
+				scanf("%d", &temp);
+				node[i].child.push_back(temp);
+			}
+		}
+	}
+	BFS(0);
+	printf("%.1lf", ans);
+	system("pause");
+	return 0;
+}
