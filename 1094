@@ -1,0 +1,52 @@
+#include<stdio.h>
+#include<vector>
+#include<stdlib.h>
+#include<queue>
+using namespace std;
+const int maxn = 105;
+int N, M;
+int ans[maxn] = {0}, ansnum=0;
+struct Node
+{
+	int level;
+	vector<int>child;
+}node[maxn];
+void BFS(int root)
+{
+	queue<int>q;
+	node[root].level = 1;
+	q.push(root);
+	while (!q.empty())
+	{
+		int front = q.front();
+		q.pop();
+		ans[node[front].level]++;
+		if (ans[node[front].level] > ans[ansnum])
+		{
+			ansnum = node[front].level;
+		}
+		for (int i = 0; i < node[front].child.size(); i++)
+		{
+			node[node[front].child[i]].level = node[front].level + 1;
+			q.push(node[front].child[i]);
+		}
+	}
+}
+int main()
+{
+	scanf("%d %d", &N, &M);
+	int k, temp,id;
+	for (int i = 0; i < M; i++)
+	{
+		scanf("%d %d",&id, &k);
+		for (int j = 0; j < k; j++)
+		{
+			scanf("%d", &temp);
+			node[id].child.push_back(temp);
+		}
+	}
+	BFS(1);
+	printf("%d %d", ans[ansnum], ansnum);
+	system("pause");
+	return 0;
+}
