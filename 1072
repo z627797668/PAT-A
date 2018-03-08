@@ -1,0 +1,141 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<algorithm>
+using namespace std;
+int N, M, K, Ds;
+const int MAXV = 1020;
+int G[MAXV][MAXV];
+const int INF = 10000000;
+struct gassation
+{
+	double minmum;
+	double averg;
+	int id;
+	int flag;
+}gas[12];
+bool cmp(gassation a, gassation b)
+{
+	if (a.flag != b.flag)return a.flag > b.flag;
+	else if (a.minmum != b.minmum)return a.minmum > b.minmum;
+	else if (a.averg != b.averg)return a.averg < b.averg;
+	else return a.id < b.id;
+}
+int d[MAXV];
+bool vis[MAXV] = { false };
+void Dijkstra(int s)
+{
+	fill(d, d + MAXV, INF);
+	d[s] = 0;
+	for (int i = 1; i <= N+M; i++)
+	{
+		int MIN = INF, u = -1;
+		for (int j = 1; j <= N+M; j++)
+		{
+			if (vis[j] == false && d[j] < MIN)
+			{
+				MIN = d[j];
+				u = j;
+			}
+		}
+		if (u == -1)return;
+		vis[u] = true;
+		for (int v = 1; v <= N+M; v++)
+		{
+			if (vis[v]==false&&G[u][v]!=INF)
+			{
+				if (d[v] > d[u] + G[u][v])
+				{
+					d[v] = d[u] + G[u][v];
+				}
+			}
+		}
+	}
+}
+int main()
+{
+	fill(G[0], G[0] + MAXV * MAXV, INF);
+	scanf("%d %d %d %d", &N, &M, &K, &Ds);
+	char s1[5], s2[5];
+	int l,t1,t2;
+	for (int i = 0; i <K ; i++)
+	{
+		t1 = 0;
+		t2 = 0;
+		scanf("%s %s %d", &s1, &s2, &l);
+		if (s1[0] == 'G')
+		{
+			int len1 = strlen(s1);
+			for (int i = 1; i <len1; i++)
+			{
+				t1 = t1 * 10 + s1[i]-'0';
+			}
+			t1 += N;
+		}
+		else
+		{
+			int len1 = strlen(s1);
+			for (int i = 0; i <len1; i++)
+			{
+				t1 = t1 * 10 + s1[i] - '0';
+			}
+		}
+		if (s2[0] == 'G')
+		{
+			int len2 = strlen(s2);
+			for (int i = 1; i <len2; i++)
+			{
+				t2 = t2 * 10 + s2[i] - '0';
+			}
+			t2 += N;
+		}
+		else
+		{
+			int len2 = strlen(s2);
+			for (int i = 0; i <len2; i++)
+			{
+				t2 = t2 * 10 + s2[i] - '0';
+			}
+		}
+		G[t1][t2] = G[t2][t1] = l;
+	}
+	for (int i = 1+N; i <= N+M; i++)
+	{
+		Dijkstra(i);
+		int k;
+		int mint = INF;
+		double sum = 0;
+		for (k = 1; k <=N; k++)
+		{
+			sum += d[k];
+			if (d[k] < mint)
+				mint = d[k];
+			if (d[k] > Ds)
+				break;
+		}
+		if (k == N + 1)
+		{
+			gas[i - 1 - N].flag = 1;
+			gas[i - 1 - N].minmum = mint;
+			gas[i - 1 - N].averg = sum / N;
+			gas[i - 1 - N].id = i - N;
+		}
+		else
+		{
+			gas[i - 1 - N].flag = 0;
+		}
+		memset(vis, false, sizeof(vis));
+	}
+	sort(gas, gas + M, cmp);
+	if (gas[0].flag == 0)
+	{
+		printf("No Solution");
+	}
+	else
+	{
+		printf("G%d", gas[0].id);
+		printf("\n%.1lf %.1lf", gas[0].minmum, gas[0].averg);
+	}
+	system("pause");
+	return 0;
+}
