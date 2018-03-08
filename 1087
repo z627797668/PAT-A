@@ -1,0 +1,140 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string>
+#include<iostream>
+#include<map>
+#include<algorithm>
+#include<vector>
+using namespace std;
+map<string, int>mp;
+const int INF = 100000000;
+const int maxn = 205;
+string inttostring[maxn];
+int N, K,validnum=0;
+int happness[maxn] = { 0 };
+int Cost[maxn][maxn];
+vector<int>pre[maxn];
+int c[maxn];
+bool vis[maxn] = { false };
+string start;
+vector<int>tempPath, path;
+int numk = 0;
+double maxavg=0;
+int maxsum = 0;
+void DFS(int v)
+{
+	if (v == mp[start])
+	{
+		numk++;
+		tempPath.push_back(mp[start]);
+		int sum = 0;
+		double avg = 0;
+		for (int i =tempPath.size()-1 ; i >=0 ; i--)
+		{
+			sum += happness[tempPath[i]];
+		}
+		if (sum > maxsum)
+		{
+			maxavg = 1.0*sum / (tempPath.size()-1);
+			maxsum = sum;
+			path = tempPath;
+		}
+		else if (sum == maxsum)
+		{
+			avg = 1.0*sum / (tempPath.size()-1);
+			if (avg > maxavg)
+			{
+				maxavg = avg;
+				path = tempPath;
+			}
+		}
+		tempPath.pop_back();
+		return ;
+	}
+	tempPath.push_back(v);
+	for (int i = 0; i < pre[v].size(); i++)
+	{
+		DFS(pre[v][i]);
+	}
+	tempPath.pop_back();
+}
+void Dijkstra(int s)
+{
+	fill(c, c + maxn, INF);
+	c[s] = 0;
+	for (int i = 0; i < N; i++)
+	{
+		int MIN = INF, u = -1;
+		for (int j = 0; j < N; j++)
+		{
+			if (vis[j] == false && c[j] < MIN)
+			{
+				MIN = c[j];
+				u = j;
+			}
+		}
+		if (u == -1)return;
+		vis[u] = true;
+		for (int v = 0; v < N; v++)
+		{
+			if (vis[v] == false && Cost[u][v] != INF)
+			{
+				if (c[v] > c[u] + Cost[u][v])
+				{
+					pre[v].clear();
+					c[v] = c[u] + Cost[u][v];
+					pre[v].push_back(u);
+				}
+				else if (c[v] == (c[u] + Cost[u][v]))
+				{
+					pre[v].push_back(u);
+				}
+			}
+		}
+	}
+}
+int main()
+{
+	fill(Cost[0], Cost[0] + maxn * maxn, INF);
+	scanf("%d %d", &N, &K);
+	cin >> start;
+	if (mp.find(start) == mp.end())
+	{
+		mp[start] = validnum;
+		inttostring[validnum++] = start;
+	}
+	string t1, t2;
+	for (int i = 0; i < N-1; i++)
+	{
+		cin >> t1;
+		if (mp.find(t1) == mp.end())
+		{
+			mp[t1] = validnum;
+			inttostring[validnum++] = t1;
+		}
+		scanf("%d", &happness[mp[t1]]);
+	}
+	int l;
+	for (int i = 0; i < K; i++)
+	{
+		cin >> t1 >> t2;
+		scanf("%d", &l);
+		Cost[mp[t1]][mp[t2]] = Cost[mp[t2]][mp[t1]] = l;
+	}
+	Dijkstra(mp[start]);
+	DFS(mp["ROM"]);
+	printf("%d %d %d %d\n", numk,c[mp["ROM"]],maxsum, (int)maxavg);
+	for (int i = path.size()-1; i >=0; i--)
+	{
+		if (i == path.size() - 1)
+		{
+			cout << inttostring[path[i]];
+		}
+		else
+		{
+			cout << "->" << inttostring[path[i]];
+		}
+	}
+	system("pause");
+	return 0;
+}
