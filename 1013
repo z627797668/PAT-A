@@ -1,0 +1,50 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<algorithm>
+#include<string.h>
+using namespace std;
+int N, M, K;
+const int maxn = 1005;
+int G[maxn][maxn] = {0};
+bool vis[maxn];
+void DFS(int u)
+{
+	vis[u] = true;
+	for (int i = 1; i <=N; i++)
+	{
+		if (G[u][i] == 1 && vis[i] == false)
+		{
+			DFS(i);
+		}
+	}
+}
+int main()
+{
+	scanf("%d %d %d", &N, &M, &K);
+	int t1, t2;
+	for (int i = 0; i < M; i++)
+	{
+		scanf("%d %d", &t1, &t2);
+		G[t1][t2] = G[t2][t1] = 1;
+	}
+	int duan;
+	int count;
+	for (int i = 0; i < K; i++)
+	{
+		scanf("%d", &duan);
+		vis[duan] = true;
+		count = 0;
+		for (int j = 1; j <= N; j++)
+		{
+			if (vis[j] == false)
+			{
+				DFS(j);
+				count++;
+			}
+		}
+		printf("%d\n", count - 1);
+		memset(vis, false, sizeof(vis));
+	}
+	system("pause");
+	return 0;
+}
