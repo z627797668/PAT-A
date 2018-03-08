@@ -1,0 +1,109 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<map>
+#include<vector>
+#include<string>
+#include<algorithm>
+#include<iostream>
+using namespace std;
+const int maxn = 2005;
+int vis[maxn] = { false };
+int G[maxn][maxn] = {0};
+int N, K,idsum=0;
+map<string, int>mp;
+string inttosrtring[maxn];
+int sum[maxn] = { 0 };
+int maxid, maxweight,maxp,sumnum,sumcall;
+int sumn[maxn];
+vector<int>ans;
+void DFS(int u)
+{
+	vis[u] = true;
+	for (int v = 0; v < idsum; v++)
+	{
+		if (G[u][v]!=0)
+		{
+			sum[u] += G[u][v];
+			sum[v] += G[v][u];
+			if (sum[u] > maxweight)
+			{
+				maxweight = sum[u];
+				maxid = u;
+			}
+			if (sum[v] > maxweight)
+			{
+				maxweight = sum[v];
+				maxid = v;
+			}
+			sumcall += G[u][v];
+			if (vis[v] == false)
+				sumnum++;
+			G[u][v] = 0;
+			G[v][u] = 0;
+			DFS(v);
+		}
+	}
+}
+bool cmp(int a, int b)
+{
+	return inttosrtring[a] < inttosrtring[b];
+}
+int main()
+{
+	string s1, s2;
+	int t1, t2;
+	int tw ;
+	scanf("%d %d", &N, &K);
+	for (int i = 0; i < N; i++)
+	{
+		cin >> s1 >> s2;
+		scanf("%d", &tw);
+		if (mp.find(s1) == mp.end())
+		{
+			mp[s1] = idsum;
+			t1 = idsum++;
+			inttosrtring[t1] = s1;
+		}
+		else
+		{
+			t1 = mp[s1];
+		}
+		if (mp.find(s2) == mp.end())
+		{
+			mp[s2] = idsum;
+			t2 = idsum++;
+			inttosrtring[t2] = s2;
+		}
+		else
+		{
+			t2 = mp[s2];
+		}
+		G[t1][t2] += tw;
+		G[t2][t1] += tw;
+	}
+	for (int i = 0; i < idsum; i++)
+	{
+		if (vis[i] == false)
+		{
+			maxid = 0;
+			maxweight = 0;
+			sumnum = 1;
+			sumcall = 0;
+			DFS(i);
+			if (sumnum > 2 && sumcall > K)
+			{
+				sumn[maxid] = sumnum;
+				ans.push_back(maxid);
+			}
+		}
+	}
+	sort(ans.begin(), ans.end(), cmp);
+	printf("%d\n", ans.size());
+	for (int i = 0; i < ans.size(); i++)
+	{
+		cout << inttosrtring[ans[i]];
+		printf(" %d\n", sumn[ans[i]]);
+	}
+	system("pause");
+	return 0;
+}
