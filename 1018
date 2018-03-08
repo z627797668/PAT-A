@@ -1,0 +1,127 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<algorithm>
+#include<vector>
+using namespace std;
+const int INF = 10000000;
+const int MAXV = 505;
+int Cmax,N,Sp,M;
+int bike[MAXV];
+int G[MAXV][MAXV];
+int d[MAXV];
+bool vis[MAXV] = {false};
+vector<int>pre[MAXV];
+vector<int>tempPath, path;
+int needmin = 105, takeback = 105;
+void DFS(int v)
+{
+	if (v == 0)
+	{
+		tempPath.push_back(0);
+		int tneedmin = 0;
+		int need=0,now=0;
+		for (int i =tempPath.size()-2; i >=0; i--)
+		{
+			if (bike[tempPath[i]] == Cmax / 2);
+			else if (bike[tempPath[i]] > Cmax / 2)
+			{
+				now += bike[tempPath[i]] - Cmax / 2;
+			}
+			else
+			{
+				if (Cmax / 2 - bike[tempPath[i]] - now >= 0) {
+					need += Cmax / 2 - bike[tempPath[i]] - now;
+					now = 0;
+				}
+				else {
+					now -= (Cmax / 2 - bike[tempPath[i]]);
+				}
+				if (need > tneedmin)
+				{
+					tneedmin = need;
+				}
+			}
+		}
+		if (tneedmin < needmin)
+		{
+			needmin = tneedmin;
+			path = tempPath;
+			takeback = now;
+		}
+		else if (tneedmin == needmin && now < takeback)
+		{
+			takeback = now;
+			path = tempPath;
+		}
+		tempPath.pop_back();
+		return;
+	}
+	tempPath.push_back(v);
+	for (int i = 0; i < pre[v].size(); i++)
+	{
+		DFS(pre[v][i]);
+	}
+	tempPath.pop_back();
+}
+void Dijkstra(int s)
+{
+	fill(d, d + MAXV, INF);
+	d[s] = 0;
+	for (int i = 0; i < N+1; i++)
+	{
+		int MIN = INF, u = -1;
+		for (int j = 0; j < N+1; j++)
+		{
+			if (vis[j] == false && d[j] < MIN)
+			{
+				MIN = d[j];
+				u = j;
+			}
+		}
+		if (u == -1)return;
+		vis[u] = true;
+		for (int v = 0; v < N+1; v++)
+		{
+			if (vis[v] == false && G[u][v] != INF)
+			{
+				if (d[v] > d[u] + G[u][v]) {
+					pre[v].clear();
+					d[v] = d[u] + G[u][v];
+					pre[v].push_back(u);
+				}
+				else if (d[v] == d[u] + G[u][v])
+				{
+					pre[v].push_back(u);
+				}
+			}
+		}
+	}
+}
+int main()
+{
+	fill(G[0], G[0] + MAXV * MAXV, INF);
+	scanf("%d %d %d %d", &Cmax, &N, &Sp, &M);
+	for (int i = 1; i <= N; i++)
+	{
+		scanf("%d", &bike[i]);
+	}
+	int t1, t2,tg;
+	for (int i = 0; i < M; i++)
+	{
+		scanf("%d %d %d", &t1, &t2, &tg);
+		G[t1][t2] = G[t2][t1] = tg;
+	}
+	Dijkstra(0);
+	DFS(Sp);
+	printf("%d ", needmin);
+	for (int i = path.size()-1; i >= 0; i--)
+	{
+		if (i == path.size() - 1)
+			printf("%d", path[i]);
+		else
+			printf("->%d", path[i]);
+	}
+	printf(" %d", takeback);
+	system("pause");
+	return 0;
+}
