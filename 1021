@@ -1,0 +1,92 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<vector>
+#include<string.h>
+#include<set>
+using namespace std;
+int N;
+set<int> ans;
+const int maxn = 10005;
+vector<int>adj[maxn];
+bool vis[maxn] = { false };
+void DFS(int u)
+{
+	vis[u] = true;
+	for (int i = 0; i <adj[u].size(); i++)
+	{
+		if (vis[adj[u][i]] == false)
+			DFS(adj[u][i]);
+	}
+}
+int depp;
+void DFS1(int u, int depth)
+{
+	if (depth > depp)
+	{
+		depp = depth;
+	}
+	vis[u] = true;
+	for (int i = 0; i < adj[u].size(); i++)
+	{
+		if (vis[adj[u][i]] == false)
+		{
+			DFS1(adj[u][i], depth + 1);
+		}
+	}
+}
+int main()
+{
+	scanf("%d", &N);
+	int t1, t2;
+	if (N == 1)
+		printf("1");
+	else {
+		for (int i = 0; i < N - 1; i++)
+		{
+			scanf("%d %d", &t1, &t2);
+			adj[t1].push_back(t2);
+			adj[t2].push_back(t1);
+		}
+		int count = 0;
+		for (int i = 1; i <= N; i++)
+		{
+			if (vis[i] == false)
+			{
+				DFS(i);
+				count++;
+			}
+		}
+		int deepest = -1;
+		if (count != 1)
+			printf("Error: %d components", count);
+		else
+		{
+			for (int i = 1; i <= N; i++)
+			{
+				if (adj[i].size() == 1) {
+					memset(vis, false, sizeof(vis));
+					int deepth = 1;
+					depp = -1;
+					DFS1(i, deepth);
+					if (depp > deepest)
+					{
+						ans.clear();
+						ans.insert(i);
+						deepest = depp;
+					}
+					else if (depp == deepest)
+					{
+						ans.insert(i);
+					}
+				}
+			}
+			set<int>::iterator it = ans.begin();
+			for (; it != ans.end(); it++)
+			{
+				printf("%d\n", *it);
+			}
+		}
+	}
+	system("pause");
+	return 0;
+}
