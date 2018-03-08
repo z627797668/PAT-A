@@ -1,0 +1,69 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<vector>
+#include<queue>
+#include<string.h>
+using namespace std;
+const int maxn = 1005;
+int N, L;
+bool vis[maxn] = { false };
+int follows = 0;
+struct Node
+{
+	vector<int>adj;
+	int level;
+}node[maxn];
+void BFS(int u)
+{
+	queue<Node>q;
+	Node f = node[u];
+	f.level = 0;
+	vis[u] = true;
+	q.push(f);
+	while (!q.empty())
+	{
+		Node fr = q.front();
+		q.pop();
+		if (fr.level > L)
+			;
+		else
+			follows++;
+		for (int i = 0; i <fr.adj.size(); i++)
+		{
+			if (vis[fr.adj[i]] == false)
+			{
+				node[fr.adj[i]].level = 1 + fr.level;
+				q.push(node[fr.adj[i]]);
+				vis[fr.adj[i]] = true;
+			}
+		}
+	}
+}
+int main()
+{
+	scanf("%d %d", &N, &L);
+	int M;
+	for (int i = 1; i <= N; i++)
+	{
+		scanf("%d", &M);
+		int temp;
+		for (int j = 0; j < M; j++)
+		{
+			scanf("%d", &temp);
+			node[temp].adj.push_back(i);
+		}
+	}
+	int K;
+	scanf("%d", &K);
+	int begin;
+	for (int i = 0; i < K; i++)
+	{
+		follows = 0;
+		scanf("%d", &begin);
+		BFS(begin);
+		printf("%d\n", follows-1);
+		memset(vis, false, sizeof(vis));
+	}
+	system("pause");
+	return 0;
+}
