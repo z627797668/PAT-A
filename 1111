@@ -1,0 +1,248 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<vector>
+#include<algorithm>
+#include<string.h>
+using namespace std;
+const int INF = 100000000;
+const int MAXV = 505;
+int length[MAXV][MAXV];
+int tt[MAXV][MAXV];
+int N, M;
+int d[MAXV];
+bool vis[MAXV] = { false };
+vector<int>pre1[MAXV];
+void Dijkstra1(int s)
+{
+	fill(d, d + MAXV, INF);
+	d[s] = 0;
+	for (int i = 0; i < N; i++)
+	{
+		int u = -1, MIN = INF;
+		for (int j = 0; j < N; j++)
+		{
+			if (vis[j] == false && MIN > d[j])
+			{
+				u = j;
+				MIN = d[j];
+			}
+		}
+		if (u == -1)return;
+		vis[u] = true;
+		for (int v = 0; v < N; v++)
+		{
+			if (vis[v] == false && length[u][v] != INF)
+			{
+				if (d[v] > d[u] + length[u][v])
+				{
+					pre1[v].clear();
+					pre1[v].push_back(u);
+					d[v] = d[u] + length[u][v];
+				}
+				else if (d[v] == d[u] + length[u][v])
+				{
+					pre1[v].push_back(u);
+				}
+			}
+		}
+	}
+}
+int st, endt;
+vector<int>tempPath1, path1;
+int time1 = INF;
+void DFS1(int v)
+{
+	if (v == st)
+	{
+		tempPath1.push_back(v);
+		int ttime=0;
+		for (int i = tempPath1.size()-1; i >= 1; i--)
+		{
+			int id = tempPath1[i], idnext = tempPath1[i - 1];
+			ttime += tt[id][idnext];
+		}
+		if (ttime < time1)
+		{
+			time1 = ttime;
+			path1 = tempPath1;
+		}
+		tempPath1.pop_back();
+	}
+	tempPath1.push_back(v);
+	for (int i = 0; i < pre1[v].size(); i++)
+	{
+		DFS1(pre1[v][i]);
+	}
+	tempPath1.pop_back();
+}
+int t[MAXV];
+vector<int>pre2[MAXV];
+void Dijkstra2(int s)
+{
+	memset(vis, false, sizeof(vis));
+	fill(t, t + MAXV, INF);
+	t[s] = 0;
+	for (int i = 0; i < N; i++)
+	{
+		int u = -1, MIN = INF;
+		for (int j= 0; j < N; j++)
+		{
+			if (vis[j] == false && t[j] < MIN)
+			{
+				MIN = t[j];
+				u = j;
+			}
+		}
+		if (u == -1)return;
+		vis[u] = true;
+		for (int v = 0; v < N; v++)
+		{
+			if (vis[v] == false && tt[u][v] != INF)
+			{
+				if (t[v] > tt[u][v] + t[u])
+				{
+					pre2[v].clear();
+					pre2[v].push_back(u);
+					t[v] = tt[u][v] + t[u];
+				}
+				else if(t[v] ==tt[u][v] + t[u])
+				{
+					pre2[v].push_back(u);
+				}
+			}
+		}
+	}
+}
+int numk = 0;
+vector<int>tempPath2, path2;
+void DFS2(int v)
+{
+	if (v == st)
+	{
+		tempPath2.push_back(st);
+		if (path2.size() == 0)
+		{
+			path2 = tempPath2;
+		}
+		else
+		{
+			if (tempPath2.size() < path2.size())
+			{
+				path2 = tempPath2;
+			}
+		}
+		tempPath2.pop_back();
+	}
+	tempPath2.push_back(v);
+	for (int i = 0; i < pre2[v].size(); i++)
+	{
+		DFS2(pre2[v][i]);
+	}
+	tempPath2.pop_back();
+}
+int main()
+{
+	fill(length[0], length[0] + MAXV * MAXV, INF);
+	fill(tt[0], tt[0] + MAXV * MAXV, INF);
+	scanf("%d %d", &N, &M);
+	int  t1, t2, one, l, ttt;
+	for (int i = 0; i < M; i++)
+	{
+		scanf("%d %d %d %d %d", &t1, &t2, &one, &l, &ttt);
+		if (one == 1)
+		{
+			length[t1][t2] = l;
+			tt[t1][t2] = ttt;
+		}
+		else
+		{
+			length[t1][t2]= length[t2][t1] = l;
+			tt[t1][t2]= tt[t2][t1] = ttt;
+		}
+	}
+	scanf("%d %d", &st, &endt);
+	Dijkstra1(st);
+	Dijkstra2(st);
+	DFS1(endt);
+	DFS2(endt);
+	if (path1.size() != path2.size())
+	{
+		printf("Distance = %d: ", d[endt]);
+		for (int i = path1.size()-1; i >= 0; i--)
+		{
+			if (i == path1.size() - 1)
+			{
+				printf("%d", path1[i]);
+			}
+			else
+			{
+				printf(" -> %d", path1[i]);
+			}
+		}
+		printf("\nTime = %d: ", t[endt]);
+		for (int i = path2.size() - 1; i >= 0; i--)
+		{
+			if (i == path2.size() - 1)
+			{
+				printf("%d", path2[i]);
+			}
+			else
+			{
+				printf(" -> %d", path2[i]);
+			}
+		}
+	}
+	else
+	{
+		int k;
+		for (k = 0; k < path1.size(); k++)
+		{
+			if (path1[k] != path2[k])
+				break;
+		}
+		if (k == path1.size())
+		{
+			printf("Distance = %d; Time = %d: ", d[endt],t[endt]);
+			for (int i = path1.size() - 1; i >= 0; i--)
+			{
+				if (i == path1.size() - 1)
+				{
+					printf("%d", path1[i]);
+				}
+				else
+				{
+					printf(" -> %d", path1[i]);
+				}
+			}
+		}
+		else
+		{
+			printf("Distance = %d: ", d[endt]);
+			for (int i = path1.size() - 1; i >= 0; i--)
+			{
+				if (i == path1.size() - 1)
+				{
+					printf("%d", path1[i]);
+				}
+				else
+				{
+					printf(" -> %d", path1[i]);
+				}
+			}
+			printf("\nTime = %d: ", t[endt]);
+			for (int i = path2.size() - 1; i >= 0; i--)
+			{
+				if (i == path2.size() - 1)
+				{
+					printf("%d", path2[i]);
+				}
+				else
+				{
+					printf(" -> %d", path2[i]);
+				}
+			}
+		}
+	}
+	system("pause");
+	return 0;
+}
