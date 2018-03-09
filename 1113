@@ -1,0 +1,38 @@
+#include<algorithm>
+#include<stdio.h>
+#include<stdlib.h>
+using namespace std;
+const int maxn = 100005;
+int sumb = 0, suml = 0;
+int num[maxn];
+int main()
+{
+	int N;
+	scanf("%d", &N);
+	for (int i = 0; i < N; i++)
+	{
+		scanf("%d", &num[i]);
+	}
+	sort(num, num + N);
+	if (N % 2 == 0) {
+		int len = N / 2;
+		for (int i = 0; i <len; i++)
+		{
+			suml += num[i];
+			sumb += num[N - 1 - i];
+		}
+		printf("0 %d",sumb-suml);
+	}
+	else {
+		int len = N / 2;
+		for (int i = 0; i <len; i++)
+		{
+			suml += num[i];
+			sumb += num[N - 1 - i];
+		}
+		sumb += num[len];
+		printf("1 %d", sumb - suml);
+	}
+	system("pause");
+	return 0;
+}
