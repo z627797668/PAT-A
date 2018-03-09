@@ -1,0 +1,136 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<vector>
+#include<algorithm>
+using namespace std;
+const int maxn = 10005;
+int N;
+int father[maxn];
+struct Node
+{
+	int es=0;
+	int area=0;
+	double avga;
+	double avges;
+	int flag=0;
+	int people=0;
+	int id;
+}node[maxn];
+void init()
+{
+	for (int i = 0; i < maxn; i++)
+	{
+		father[i] = i;
+	}
+}
+int findFather(int x)
+{
+	int a = x;
+	while (x!=father[x])
+	{
+		x = father[x];
+	}
+	while (a!=x)
+	{
+		int z = a;
+		a = father[a];
+		father[z] = x;
+	}
+	return x;
+}
+int Union(int a, int b)
+{
+	int faA = findFather(a);
+	int faB = findFather(b);
+	if (faA != faB)
+	{
+		if (faA > faB)
+		{
+			father[faA] = faB;
+			return faB;
+		}
+		else
+		{
+			father[faB] = faA;
+			return faA;
+		}
+	}
+}
+bool cmp1(Node a, Node b)
+{
+	if (a.flag != b.flag)return a.flag > b.flag;
+	else if (a.avga != b.avga)return a.avga > b.avga;
+	else return a.id < b.id;
+}
+int main()
+{
+	init();
+	scanf("%d", &N);
+	vector<int>vi;
+	int p, fa, ma,k,child,es,area,mini;
+	for (int i = 0; i < N; i++)
+	{
+		vi.clear();
+		scanf("%d %d %d %d",&p,&fa,&ma,&k);
+		vi.push_back(p);
+		if (fa != -1)
+			vi.push_back(fa);
+		if (ma != -1)
+			vi.push_back(ma);
+		for (int j = 0; j < k; j++)
+		{
+			scanf("%d", &child);
+			vi.push_back(child);
+		}
+		scanf("%d %d", &es, &area);
+		mini = findFather(p);
+		node[mini].area += area;
+		node[mini].es += es;
+		node[mini].flag = 1;
+		node[mini].id = mini;
+		for (int k = 0; k < vi.size(); k++)
+		{
+			int t = findFather(vi[k]);
+			if (t != mini)
+			{
+				int un = Union(t, mini);
+				if (un == mini);
+				else
+				{
+					int temp = t;
+					t = mini;
+					mini = un;
+				}
+				node[mini].area += node[t].area;
+				node[mini].es += node[t].es;
+				node[t].flag = 0;
+				node[mini].flag = 1;
+				node[mini].id = mini;
+			}
+		}
+	}
+	for (int i = 0; i < maxn; i++)
+	{
+			node[findFather(i)].people++;
+			node[findFather(i)].avges = (1.0)*node[findFather(i)].es / node[findFather(i)].people;
+			node[findFather(i)].avga = (1.0)*node[findFather(i)].area / node[findFather(i)].people;
+	}
+	int count = 0;
+	sort(node, node + maxn, cmp1);
+	for (int i = 0; i < maxn; i++)
+	{
+		if (node[i].flag == 1)
+		{
+			count++;
+		}
+		else
+			break;
+	}
+	printf("%d\n", count);
+	for (int i = 0; i < count; i++)
+	{
+		printf("%04d %d %.3lf %.3lf\n", node[i].id, node[i].people, node[i].avges, node[i].avga);
+	}
+	system("pause");
+	return 0;
+}
