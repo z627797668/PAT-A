@@ -1,0 +1,86 @@
+#include<stdio.h>
+#include<stdlib.h>
+const int maxn = 35;
+int pre[maxn], post[maxn];
+int N;
+struct node
+{
+	int data;
+	node*lchild;
+	node*rchild;
+};
+bool t = false;
+node* Newnode(int data)
+{
+	node*root = new node;
+	root->data = data;
+	root->lchild = root->rchild = NULL;
+	return root;
+}
+node*create(int preL, int preR, int postL, int postR)
+{
+		if (preR == preL)
+		{
+			node*root = Newnode(pre[preL]);
+			return root;
+		}
+		else if (preR == preL + 1)
+		{
+			t = true;
+			node*root = Newnode(pre[preL]);
+			root->lchild = Newnode(pre[preR]);
+			return root;
+		}
+		else if (preR - preL >= 2)
+		{
+			node*root = Newnode(pre[preL]);
+			int i;
+			for (i = postL; i <postR ; i++)
+			{
+				if (pre[preL + 1] == post[i])
+					break;
+			}
+			int numpre = i - postL;
+			root->lchild = create(preL + 1, preL + 1 + numpre, postL, postL + numpre);
+			root->rchild = create(preL + 2 + numpre, preR, postL + numpre + 1, postR - 1);
+			return root;
+		}
+		else
+		{
+			return NULL;
+		}
+}
+int pcount = 0;
+void inorder(node*root)
+{
+	if (root == NULL)
+		return;
+	inorder(root->lchild);
+	printf("%d", root->data);
+	pcount++;
+	if (pcount != N)
+		printf(" ");
+	else
+		printf("\n");//最后换行不然格式错误
+	inorder(root->rchild);
+}
+int main()
+{
+	scanf("%d", &N);
+	for (int i = 0; i < N; i++)
+	{
+		scanf("%d", &pre[i]);
+	}
+	for (int i = 0; i < N; i++)
+	{
+		scanf("%d", &post[i]);
+	}
+	node*root = create(0, N - 1, 0, N - 1);
+	if (t == false)
+		printf("Yes\n");
+	else
+		printf("No\n");
+	inorder(root);
+	system("pause");
+	return 0;
+}
