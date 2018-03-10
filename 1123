@@ -1,0 +1,123 @@
+#include<stdio.h>
+#include<stdlib.h>
+const int maxn = 25;
+int N;
+int num[maxn];
+struct node
+{
+	int height;
+	int data;
+	node*lchild;
+	node*rchild;
+};
+node*Newnode(int data)
+{
+	node*root = new node;
+	root->data = data;
+	root->height = 1;
+	root->lchild = root->rchild = NULL;
+	return root;
+}
+int getHeight(node*root)
+{
+	if (root == NULL)
+		return 0;
+	else
+	{
+		if (getHeight(root->lchild) > getHeight(root->rchild))
+			return getHeight(root->lchild) + 1;
+		else
+			return getHeight(root->rchild) + 1;
+	}
+}
+void updateHeight(node*&root)
+{
+	if (root == NULL)
+		root->height= 0;
+	else
+	{
+		if (getHeight(root->lchild) > getHeight(root->rchild))
+			 root->height=getHeight(root->lchild) + 1;
+		else
+			root->height=getHeight(root->rchild) + 1;
+	}
+}
+int getBalancefactor(node*root)
+{
+	return getHeight(root->lchild) - getHeight(root->rchild);
+}
+void L(node*&root)
+{
+	node*temp = root->rchild;
+	root->rchild = temp->lchild;
+	temp->lchild = root;
+	updateHeight(temp);
+	updateHeight(root);
+	root = temp;
+}
+void R(node*&root)
+{
+	node*temp = root->lchild;
+	root->lchild = temp->rchild;
+	temp->rchild = root;
+	updateHeight(temp);
+	updateHeight(root);
+	root = temp;
+}
+void insert(node*&root, int data)
+{
+	if (root == NULL)
+	{
+		root = Newnode(data);
+		return;
+	}
+	if (root->data > data)
+	{
+		insert(root->lchild, data);
+		updateHeight(root);
+		if (getBalancefactor(root) == 2)
+		{
+			if (getBalancefactor(root->lchild) == 1)
+			{
+				R(root);
+			}
+			else
+			{
+				L(root->lchild);
+				R(root);
+			}
+		}
+	}
+	else
+	{
+		insert(root->rchild, data);
+		updateHeight(root);
+		if (getBalancefactor(root) == -2)
+		{
+			if (getBalancefactor(root->rchild) == -1)
+			{
+				L(root);
+			}
+			else
+			{
+				R(root->rchild);
+				L(root);
+			}
+		}
+	}
+}
+int main()
+{
+	scanf("%d", &N);
+	for (int i = 0; i < N; i++)
+	{
+		scanf("%d", &num[i]);
+	}
+	node*root = NULL;
+	for (int i = 0; i < N; i++)
+	{
+		insert(root, num[i]);
+	}
+	system("pause");
+	return 0;
+}
