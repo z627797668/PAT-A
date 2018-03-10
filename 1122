@@ -1,0 +1,79 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<set>
+#include<string.h>
+#include<queue>
+using namespace std;
+const int maxn = 205;
+set<int>adj[maxn];
+bool vis[maxn] = { false };
+int n,start;
+queue<int>q;
+bool t = false;
+int visnum = 0;
+void fun()
+{
+	int pre = q.front();
+	vis[pre] = true;
+	q.pop();
+	visnum++;
+	while (!q.empty())
+	{
+		int now = q.front();
+		if (adj[pre].find(now) == adj[pre].end())
+			break;
+		if (vis[now] == false)
+		{
+			visnum++;
+			if(q.size()==1)
+				break;
+			vis[now] = true;
+			pre = now;
+			q.pop();
+		}
+		else
+		{
+			if(now==start)
+			q.pop();
+			break;
+		}
+	}
+}
+int main()
+{
+	int N, M;
+	scanf("%d %d", &N, &M);
+	int t1, t2;
+	for (int i = 0; i < M; i++)
+	{
+		scanf("%d %d", &t1, &t2);
+		adj[t1].insert(t2);
+		adj[t2].insert(t1);
+	}
+	int K,temp;
+	scanf("%d", &K);
+	for (int i = 0; i < K; i++)
+	{
+		scanf("%d", &n);
+		while (!q.empty())
+		{
+			q.pop();
+		}
+		visnum = 0;
+		memset(vis, false, sizeof(vis));
+		for (int j = 0; j < n; j++)
+		{
+			scanf("%d", &temp);
+			if (j == 0)
+			start = temp;
+			q.push(temp);
+		}
+		fun();
+		if (!q.empty()||visnum!=N)
+			printf("NO\n");
+		else
+			printf("YES\n");
+	}
+	system("pause");
+	return 0;
+}
