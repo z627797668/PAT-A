@@ -1,6 +1,9 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<queue>
+using namespace std;
 const int maxn = 25;
+int tree[50];
 int N;
 int num[maxn];
 struct node
@@ -24,23 +27,16 @@ int getHeight(node*root)
 		return 0;
 	else
 	{
-		if (getHeight(root->lchild) > getHeight(root->rchild))
-			return getHeight(root->lchild) + 1;
-		else
-			return getHeight(root->rchild) + 1;
+		return root->height;
 	}
 }
-void updateHeight(node*&root)
+void updateHeight(node*root)
 {
-	if (root == NULL)
-		root->height= 0;
-	else
-	{
+	
 		if (getHeight(root->lchild) > getHeight(root->rchild))
-			 root->height=getHeight(root->lchild) + 1;
+			root->height=getHeight(root->lchild) + 1;
 		else
 			root->height=getHeight(root->rchild) + 1;
-	}
 }
 int getBalancefactor(node*root)
 {
@@ -51,8 +47,8 @@ void L(node*&root)
 	node*temp = root->rchild;
 	root->rchild = temp->lchild;
 	temp->lchild = root;
-	updateHeight(temp);
 	updateHeight(root);
+	updateHeight(temp);
 	root = temp;
 }
 void R(node*&root)
@@ -60,8 +56,8 @@ void R(node*&root)
 	node*temp = root->lchild;
 	root->lchild = temp->rchild;
 	temp->rchild = root;
-	updateHeight(temp);
 	updateHeight(root);
+	updateHeight(temp);
 	root = temp;
 }
 void insert(node*&root, int data)
@@ -106,9 +102,37 @@ void insert(node*&root, int data)
 		}
 	}
 }
+int pc = 0;
+void levelorder(node*root)
+{
+	queue<node*>q;
+	q.push(root);
+	while (!q.empty())
+	{
+		node*now = q.front();
+		q.pop();
+		printf("%d", now->data);
+		pc++;
+		if (pc != N)
+			printf(" ");
+		if (now->lchild != NULL)q.push(now->lchild);
+		if (now->rchild != NULL)q.push(now->rchild);
+	}
+}
+int s = 1;
+void create(node*root, int s)
+{
+	tree[s] = root->data;
+	if (root->lchild != NULL)create(root->lchild, 2 * s);
+	if (root->rchild != NULL)create(root->rchild, 2 * s + 1);
+}
 int main()
 {
 	scanf("%d", &N);
+	for (int i = 0; i < 50; i++)
+	{
+		tree[i] = -1;
+	}
 	for (int i = 0; i < N; i++)
 	{
 		scanf("%d", &num[i]);
@@ -118,6 +142,22 @@ int main()
 	{
 		insert(root, num[i]);
 	}
+	levelorder(root);
+	printf("\n");
+	create(root, s);
+	int count = 0;
+	for (int i = 1; i <=N; i++)
+	{
+		if (tree[i] != -1)
+			count ++ ;
+		else
+			break;
+	}
+	if (count == N)
+		printf("YES");
+	else
+		printf("NO");
+	printf("\n");
 	system("pause");
 	return 0;
 }
