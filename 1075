@@ -2,126 +2,82 @@
 #include<stdlib.h>
 #include<algorithm>
 using namespace std;
+int N, K, M;
+int p[6];
 const int maxn = 10005;
-struct node
+struct Node
 {
+	bool flag=false;
+	int solve=0;
+	int grade[6] = { -1,-1,-1,-1,-1,-1 };
 	int id;
-	int total = -1;
-	int flag = 0;
-	int grade[5] = { -2,-2,-2,-2,-2 };
-}n[maxn];
-int to[100005];
-bool cmp(node a, node b)
+	int r;
+	int sum=0;
+}node[maxn];
+bool cmp(Node a, Node b)
 {
-    if (a.total != b.total)return a.total > b.total;
-	else if (a.flag != b.flag)return a.flag > b.flag;
+	if (a.flag != b.flag)return a.flag > b.flag;
+	else if (a.sum != b.sum)return a.sum > b.sum;
+	else if (a.solve != b.solve)return a.solve > b.solve;
 	else return a.id < b.id;
 }
 int main()
 {
-	int N, K, M;
-	for (int i = 0; i < 100005; i++)
-	{
-		to[i] = -1;
-	}
-	int full_grade[5];
 	scanf("%d %d %d", &N, &K, &M);
 	for (int i = 0; i < K; i++)
 	{
-		scanf("%d", &full_grade[i]);
+		scanf("%d", &p[i]);
 	}
-	int wh, score, idd, num = 0, temp;
-	bool flagg;
+	int tid, pid, tscore;
 	for (int i = 0; i < M; i++)
 	{
-		flagg = false;
-		scanf("%d %d %d", &idd, &wh, &score);
-		wh--;
-		if (to[idd] == -1)
+		scanf("%d %d %d", &tid, &pid, &tscore);
+		if (tscore != -1)
+			node[tid].flag = true;
+		node[tid].id = tid;
+		if (tscore == -1&&node[tid].grade[pid-1]==-1)
+			node[tid].grade[pid - 1] = 0;
+		if (tscore>node[tid].grade[pid-1])
 		{
-			flagg = true;
-			to[idd] = num;
-			temp = num;
-			n[temp].id = idd;
-		}
-		else
-		{
-			temp = to[idd];
-		}
-		if (score ==-1)
-		{
-			if(n[temp].grade[wh] == -2)
-				n[temp].grade[wh] = -1;
-		}
-		else
-		{
-			if (score>n[temp].grade[wh])
+			if (tscore == p[pid - 1])
 			{
-				if (n[temp].total == -1)
-					n[temp].total = 0;
-				if (n[temp].grade[wh] != -2&&n[temp].grade[wh]!=-1)
-				{
-					n[temp].total = n[temp].total + score - n[temp].grade[wh];
-				}
-				else
-				{
-					n[temp].total = n[temp].total + score;
-				}
-				n[temp].grade[wh] = score;
-				if (score == full_grade[wh])
-					n[temp].flag++;
+				node[tid].solve++;
 			}
-		}
-		if (flagg == true)
-		{
-			num++;
+			node[tid].grade[pid - 1] = tscore;
 		}
 	}
-	sort(n, n + num, cmp);
-	int r = 1;
-	for (int i = 0; i < num; i++)
+	for (int i = 1; i <= N; i++)
 	{
-		if (n[i].total != -1) {
-			if (i > 0 && n[i].total == n[i - 1].total)
-			{
-				printf("%d %05d %d", r, n[i].id, n[i].total);
-				for (int j = 0; j < K; j++)
-				{
-					if (n[i].grade[j] > -1)
-						printf(" %d", n[i].grade[j]);
-					else if (n[i].grade[j] == -1)
-					{
-						printf(" 0");
-					}
-					else
-					{
-						printf(" -");
-					}
-				}
-				printf("\n");
-			}
+		for (int j = 0; j < K; j++)
+		{
+			if (node[i].flag == true && node[i].grade[j] != -1)
+				node[i].sum += node[i].grade[j];
+		}
+	}
+	sort(node + 1, node + 1 + N, cmp);
+	int r = 1;
+	for (int i = 1; i <= N&&node[i].flag==true; i++)
+	{
+		if (i >= 2 && node[i].sum == node[i - 1].sum)
+			;
+		else
+		{
+			r = i;
+		}
+		printf("%d %05d %d ", r, node[i].id, node[i].sum);
+		for (int j = 0; j < K; j++)
+		{
+			if (node[i].grade[j] != -1)
+				printf("%d", node[i].grade[j]);
+			else
+				printf("-");
+			if (j != K - 1)
+				printf(" ");
 			else
 			{
-				r = 1 + i;
-				printf("%d %05d %d", r, n[i].id, n[i].total);
-				for (int j = 0; j < K; j++)
-				{
-					if (n[i].grade[j] > -1)
-						printf(" %d", n[i].grade[j]);
-					else if (n[i].grade[j] == -1)
-					{
-						printf(" 0");
-					}
-					else
-					{
-						printf(" -");
-					}
-				}
 				printf("\n");
 			}
 		}
-		else
-			break;
 	}
 	system("pause");
 	return 0;
