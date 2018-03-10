@@ -1,0 +1,38 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+int N;
+int main()
+{
+	scanf("%d", &N);
+	long long Z;
+	long long A, B;
+	for (int i = 0; i < N; i++)
+	{
+		scanf("%lld", &Z);
+		long long len = 0;
+		long long temp = Z;
+		while (temp != 0)
+		{
+			temp /= 10;
+			len++;
+		}
+		len /= 2;
+		len = pow(10, len);
+		A = Z /len ;
+		B = Z % len;
+		A = A * B;
+		if(A==0)
+		{
+			printf("No\n");
+		}
+		else {
+			if (Z%A == 0)
+				printf("Yes\n");
+			else
+				printf("No\n");
+		}
+	}
+	system("pause");
+	return 0;
+}
